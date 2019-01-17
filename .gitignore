@@ -63,3 +63,5 @@ typings/
 *.dll
 *.obj
 .vs
+bin
+obj

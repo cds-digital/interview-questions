@@ -1,0 +1,10 @@
+{
+  "name": "CDSPractical",
+  "version": "0.0.1",
+  "dependencies": {
+    "jasmine": "^3.3.1"
+  },
+  "scripts" : {
+  	"test" : "node ./node_modules/jasmine/bin/jasmine spec.js"
+  }
+}
