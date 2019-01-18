@@ -98,6 +98,21 @@ namespace CDSPracticalTests {
         }
 
         [Fact]
+        public void CanShuffle() {
+            Assert.Equal(new List<string> { "two", "one" }, instance.Shuffle(new List<string> { "one", "two" }));
+        }
+
+        [Fact]
+        public void CanSort() {
+            throw new NotImplementedException();
+        }
+
+        [Fact]
+        public void CanSumFibonacciNumbers() {
+            Assert.Equal(4613732, instance.FibonacciSum());
+        }
+
+        [Fact]
         public void CanGenerateListOfNumbers() {
             var list = instance.GenerateList();
 

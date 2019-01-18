@@ -2,7 +2,7 @@
 
 Requirements:
 
-1. Choose 1 or more projects to complete
+1. Complete the tasks that you have been assigned
 2. Projects are complete once all unit tests pass successfully
 3. Completed answers are submitted via a pull request on github
 
