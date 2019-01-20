@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 namespace CDSPractical {
@@ -20,9 +21,20 @@ namespace CDSPractical {
         /// }
         /// </summary>
         /// <param name="source">An enumerable containing words</param>
-        /// <returns></returns>
-        public IEnumerable<int> ExtractNumbers(IEnumerable<string> source) {
-            throw new NotImplementedException();
+        /// <returns>An enumerable of the input values that successfully parse as integers</returns>
+        public IEnumerable<int> ExtractNumbers(IEnumerable<string> source)
+        {
+            //tested 2 versions of this with 10000000 iterations of the assert, my Linq version consistently comes out slower than the foreach version
+            var results = new List<int> { };
+            foreach (var item in source)
+            {
+                int result;
+                if (int.TryParse(item, out result))
+                {
+                    results.Add(result);
+                }
+            }
+            return results;
         }
 
         /// <summary>
@@ -65,9 +77,12 @@ namespace CDSPractical {
         /// </summary>
         /// <param name="first">First list of words</param>
         /// <param name="second">Second list of words</param>
-        /// <returns></returns>
+        /// <returns>The longest string that appears in both collections</returns>
         public string LongestCommonWord(IEnumerable<string> first, IEnumerable<string> second) {
-            throw new NotImplementedException();
+            var combined = (first ?? Enumerable.Empty<string>()).Concat(second ?? Enumerable.Empty<string>());
+            var common = combined.GroupBy(w => w).Where(g => g.Count() > 1).Select(g => g.Key);
+            var longest = common.OrderByDescending(s => s.Length).FirstOrDefault();
+            return longest ?? string.Empty;
         }
 
         /// <summary>
@@ -81,9 +96,9 @@ namespace CDSPractical {
         /// ; would return 10.00;
         /// </summary>
         /// <param name="km">distance in kilometers</param>
-        /// <returns></returns>
+        /// <returns>the input value converted to miles</returns>
         public double DistanceInMiles(double km) {
-            throw new NotImplementedException();
+            return km / 1.6;
         }
 
         /// <summary>
@@ -97,9 +112,9 @@ namespace CDSPractical {
         /// ; would return 16.00;
         /// </summary>
         /// <param name="miles">distance in miles</param>
-        /// <returns></returns>
+        /// <returns>the input value converted to kilometers</returns>
         public double DistanceInKm(double miles) {
-            throw new NotImplementedException();
+            return miles * 1.6;
         }
 
         /// <summary>
@@ -119,9 +134,12 @@ namespace CDSPractical {
         /// Also complete the related test case for this method.
         /// </summary>
         /// <param name="word">The word to check</param>
-        /// <returns></returns>
+        /// <returns>boolean of true if the input word is a palindrome</returns>
         public bool IsPalindrome(string word) {
-            throw new NotImplementedException();
+            string lowercase = word.ToLower();
+            char[] lowercaseArray = lowercase.ToCharArray();
+            Array.Reverse(lowercaseArray);
+            return lowercase == (new string(lowercaseArray));
         }
 
         /// <summary>
@@ -139,10 +157,37 @@ namespace CDSPractical {
         ///   "one"
         /// }
         /// </summary>
-        /// <param name="source"></param>
+        /// <param name="source">An enumerable containing objects</param>
         /// <returns></returns>
         public IEnumerable<object> Shuffle(IEnumerable<object> source) {
-            throw new NotImplementedException();
+            if (source.Count() < 2)
+                return source;
+
+            var result = source.ToList();
+            var length = result.Count;
+            for (int i = 0; i < length-1; i++)
+            {
+                //cant use some random generator to determine positions to swap as this could potentially result in the 
+                //same ordered collection as is input
+                //further, given the requirements dont explicitly require randomness (and the given test prevents this)
+                //we can use some fixed arbitrary shuffling algorithm
+                if (i % 2 == 0)
+                {
+                    SwapElements(result, i, i + 1);
+                }
+                else
+                {
+                    SwapElements(result, i, length - 1);
+                }
+            }
+            return result;
+        }
+
+        private void SwapElements(List<object> source, int position1, int position2)
+        {
+            var temp = source[position1];
+            source[position1] = source[position2];
+            source[position2] = temp;
         }
 
         /// <summary>
@@ -151,10 +196,27 @@ namespace CDSPractical {
         /// 
         /// Complete the test for this method.
         /// </summary>
-        /// <param name="source"></param>
-        /// <returns></returns>
+        /// <param name="source">an array of of potentially unsorted integers</param>
+        /// <returns>a sorted array of integers</returns>
         public int[] Sort(int[] source) {
-            throw new NotImplementedException();
+            //going with bubble sort here as this is one of the first sorting algorithms i learned at uni in leicester back in 1994
+            //rather than copy/paste a complex quicksort algorithm from google.
+            int len = source.Length;
+            //shallow copy is fine here
+            var sortedArray = (int[]) source.Clone();
+            for (int iteration = len - 1; iteration > 0; iteration--)
+            {
+                for (int index = 0; index < iteration; index++)
+                {
+                    if (sortedArray[index] > sortedArray[index + 1])
+                    {
+                        var smaller = sortedArray[index + 1];
+                        sortedArray[index + 1] = sortedArray[index];
+                        sortedArray[index] = smaller;
+                    }
+                }
+            }
+            return sortedArray;
         }    
 
         /// <summary>
@@ -166,9 +228,12 @@ namespace CDSPractical {
         /// By considering the terms in the Fibonacci sequence whose values do 
         /// not exceed four million, find the sum of the even-valued terms.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>integer sum of even fibonacci elements that do not exceed 4000000</returns>
         public int FibonacciSum() {
-            throw new NotImplementedException();
+            var maxElementValue = 4000000;
+            var fibElements = maxElementValue.GenerateFibonacciSequence();
+            var evenSum = fibElements.Where(f => f % 2 == 0).Sum(f => f);
+            return evenSum;
         }
 
         /// <summary>
@@ -176,24 +241,30 @@ namespace CDSPractical {
         /// 
         /// This method is currently broken, fix it so that the tests pass.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>An enumerable of sequentially ordered integers 1 to 100</returns>
         public IEnumerable<int> GenerateList() {
             var ret = new List<int>();
             var numThreads = 2;
+            object listLock = new object();
 
             Thread[] threads = new Thread[numThreads];
             for (var i = 0; i < numThreads; i++) {
                 threads[i] = new Thread(() => {
                     var complete = false;
-                    while (!complete) {                        
-                        var next = ret.Count + 1;
-                        Thread.Sleep(new Random().Next(1, 10));
-                        if (next <= 100) {
-                            ret.Add(next);
-                        }
+                    while (!complete) {
+                        lock (listLock)
+                        {
+                            var next = ret.Count + 1;
+                            Thread.Sleep(new Random().Next(1, 10));
+                            if (next <= 100)
+                            {
+                                ret.Add(next);
+                            }
 
-                        if (ret.Count >= 100) {
-                            complete = true;
+                            if (ret.Count >= 100)
+                            {
+                                complete = true;
+                            }
                         }
                     }                    
                 });

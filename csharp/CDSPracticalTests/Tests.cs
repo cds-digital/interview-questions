@@ -1,124 +1,86 @@
 using CDSPractical;
 using System;
 using System.Collections.Generic;
-using Xunit;
+using NUnit.Framework;
 
 namespace CDSPracticalTests {
     public class Tests {
         Questions instance = new Questions();
 
-        [Fact]
-        public void CanExtractNumbers() {
-            Assert.Equal(new List<int> {
-                123,
-                234
-            }, instance.ExtractNumbers(new List<string> {
-                "123",
-                "hello",
-                "234"
-            }));
-
-            Assert.Equal(new List<int> {}, instance.ExtractNumbers(new List<string> {                
-                "hello",
-                "there"
-            }));
-
-            Assert.Equal(new List<int> {
-                123,
-                345
-            }, instance.ExtractNumbers(new List<string> {
-                "hello",
-                "there",
-                "123",
-                "234.23",
-                "345"
-            }));
+        [TestCase(new string[] { "123", "hello", "234" }, new int[] { 123, 234 })]
+        [TestCase(new string[] { "hello", "there" }, new int[] { })]
+        [TestCase(new string[] { "hello", "there", "123", "234.23", "345" }, new int[] { 123, 345 })]
+        public void CanExtractNumbers(IEnumerable<string> inputStrings, IEnumerable<int> parsedIntegers) {
+            Assert.AreEqual(parsedIntegers, instance.ExtractNumbers(inputStrings));
         }
 
-        [Fact]
-        public void CanGetLongestCommonWord() {
-            Assert.Equal("wandering", instance.LongestCommonWord(
-                new List<string> {
-                    "love",
-                    "wandering",
-                    "goofy",
-                    "sweet",
-                    "mean",
-                    "show",
-                    "fade",
-                    "scissors",
-                    "shoes",
-                    "gainful",
-                    "wind",
-                    "warn"
-                },
-                new List<string> {
-                    "wacky",
-                    "fabulous",
-                    "arm",
-                    "rabbit",
-                    "force",
-                    "wandering",
-                    "scissors",
-                    "fair",
-                    "homely",
-                    "wiggly",
-                    "thankful",
-                    "ear"
-                })
-            );
+        [TestCase(new string[] { "love", "goofy", "sweet", "mean", "show", "fade", "scissors", "shoes", "gainful", "wind", "warn" },
+            new string[] { "wacky", "fabulous", "arm", "rabbit", "force", "wandering", "scissors", "fair", "homely", "wiggly", "thankful", "ear" }, "scissors")]
+        [TestCase(new string[] { }, new string[] { }, "")]
+        [TestCase(null, new string[] { }, "")]
+        public void CanGetLongestCommonWord(IEnumerable<string> first, IEnumerable<string> second, string expectedLongest) {
+            //taking wandering out of the first list and requiring result of scissors is a nicer test 
+            //as we ensure the implementation considers the requirement that the word appears in both lists, not just getting the longest word in either.
+            //as it stood, you could implement the method incorrectly and the test would still pass.
+            Assert.AreEqual(expectedLongest, instance.LongestCommonWord(first, second));
         }
 
-        [Fact]
-        public void CanGetDistanceInMiles() {
-            Assert.Equal(10.00, instance.DistanceInMiles(16.00));
+        [TestCase(16.00, 10.00)]
+        [TestCase(21.00, 13.125)]
+        [TestCase(22.998, 14.37375)]
+        [TestCase(22.98456874, 14.3653554625)]
+        [TestCase(22.45718789858458d, 14.035742436615362d)]
+        public void CanGetDistanceInMiles(double km, double expectedMiles) {
+            Assert.AreEqual(expectedMiles, instance.DistanceInMiles(km));
         }
 
-        [Fact]
-        public void CanGetDistanceInKilometers() {
-            Assert.Equal(16.00, instance.DistanceInKm(10.00));
+        [TestCase(10.00, 16.00)]
+        [TestCase(13.125, 21.00)]
+        [TestCase(14.37375, 22.998)]
+        [TestCase(14.3653554625, 22.98456874)]
+        [TestCase(14.035742436615362d, 22.45718789858458d)]
+        public void CanGetDistanceInKilometers(double miles, double expectedKm) {
+            Assert.AreEqual(expectedKm, instance.DistanceInKm(miles));
         }
 
-        [Fact]
-        public void IsPalindrome() {
-            var palindromes = new List<string> {
-                
-            };
-            var invalid = new List<string> {
-                
-            };
-
-            foreach (var word in palindromes) {
-                Assert.True(instance.IsPalindrome(word));
-            }
-
-            foreach (var word in invalid) {
-                Assert.False(instance.IsPalindrome(word));
-            }
+        [TestCase("Hannah", true)]
+        [TestCase("Redivider", true)]
+        [TestCase("DAD", true)]
+        [TestCase("Mum", true)]
+        [TestCase("Boris Johnson", false)]
+        [TestCase("Donald Trump", false)]
+        public void IsPalindrome(string test, bool expectedOutcome) {
+            Assert.AreEqual(instance.IsPalindrome(test), expectedOutcome);
         }
 
-        [Fact]
+        [Test]
         public void CanShuffle() {
-            Assert.Equal(new List<string> { "two", "one" }, instance.Shuffle(new List<string> { "one", "two" }));
+            Assert.AreEqual(new List<string> { "one" }, instance.Shuffle(new List<string> { "one" }));
+            Assert.AreEqual(new List<string> { "two", "one" }, instance.Shuffle(new List<string> { "one", "two" }));
+            Assert.AreNotEqual(new List<string> { "one", "two", "three" }, instance.Shuffle(new List<string> { "one", "two", "three" }));
+            List<Person> people = new List<Person> { new Person { Name = "Bowser", Age = 21 }, new Person { Name = "Skinner", Age = 57 } };
+            Assert.AreNotEqual(people, instance.Shuffle(people));
         }
 
-        [Fact]
-        public void CanSort() {
-            throw new NotImplementedException();
+        [TestCase(new int[] { 5, 3, 2, 4, 1 }, new int[] { 1, 2, 3, 4, 5 })]
+        [TestCase(new int[] { 1, 2, 5, 3, 2, 5, 4 }, new int[] { 1, 2, 2, 3, 4, 5, 5 })]
+        [TestCase(new int[] { }, new int[] { })]
+        public void CanSort(int[] unsorted, int[] sorted) {
+            Assert.AreEqual(sorted, instance.Sort(unsorted));
         }
 
-        [Fact]
+        [Test]
         public void CanSumFibonacciNumbers() {
-            Assert.Equal(4613732, instance.FibonacciSum());
+            Assert.AreEqual(4613732, instance.FibonacciSum());
         }
 
-        [Fact]
+        [Test]
         public void CanGenerateListOfNumbers() {
             var list = instance.GenerateList();
 
             var current = 1;
             foreach (var num in list) {
-                Assert.Equal(current, num);
+                Assert.AreEqual(current, num);
                 current++;
             }
         }
