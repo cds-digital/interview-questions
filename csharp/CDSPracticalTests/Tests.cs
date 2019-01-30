@@ -1,6 +1,6 @@
 using CDSPractical;
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace CDSPracticalTests {
@@ -81,12 +81,38 @@ namespace CDSPracticalTests {
 
         [Fact]
         public void IsPalindrome() {
-            var palindromes = new List<string> {
-                
+            var palindromes = new List<string>
+            {
+	            " Civic",
+	            "Deified",
+	            "Level",
+	            "Racecar",
+	            "Lemel",
+	            "Madam",
+	            "Minim",
+	            "Murdrum",
+	            "Mum",
+	            "Radar",
+	            "nOOn",
+	            "Refer",
+	            "rotator",
+	            "sagas",
+	            "Wow ",
+	            "a"
             };
             var invalid = new List<string> {
-                
-            };
+				"already",
+	            "analysis",
+	            "Daughter",
+	            "if",
+	            "Bee",
+	            "Design",
+	            "Car",
+	            "Bill",
+	            "Radar1",
+	            "Radars" ,
+	            "Race car"
+			};
 
             foreach (var word in palindromes) {
                 Assert.True(instance.IsPalindrome(word));
@@ -102,19 +128,37 @@ namespace CDSPracticalTests {
             Assert.Equal(new List<string> { "two", "one" }, instance.Shuffle(new List<string> { "one", "two" }));
         }
 
-        [Fact]
+	    [Fact]
+	    public void CanShuffleLarger()
+	    {
+		    var originalList = new List<string> { "one", "two", "Three", "Four", "Five", "Six", "Seven"};
+		    var shuffledList = instance.Shuffle(originalList).ToList();
+		    var lastElement = originalList.Count - 1;
+
+			for (var i = 0; i < lastElement; ++i)
+			{
+				Assert.NotEqual(originalList[i], shuffledList[i]);
+			}
+	    }
+
+		[Fact]
         public void CanSort() {
-            throw new NotImplementedException();
-        }
+			int[] arrangedArray = Enumerable.Range(1, 100).ToArray();
+			int[] unarrangedArray = new int[] {63,91,71,83,94,34,51,37,8,39,58,55,22,74,50,89,73,60,9,100,52,26,48,70,4,88,81,7,15,14,99,87,6,19,
+			18,45,12,68,28,3,5,40,61,96,80,57,2,35,30,98,86,85,95,59,42,23,79,49,72,20,24,78,56,41,75,31,65,62,43,93,69,44,17,82,84,11,
+			67,77,33,16,36,21,66,92,1,32,64,38,76,90,53,27,13,25,54,97,46,10,29,47};
+
+			Assert.Equal(arrangedArray, instance.Sort(unarrangedArray));
+		}
 
         [Fact]
         public void CanSumFibonacciNumbers() {
-            Assert.Equal(4613732, instance.FibonacciSum());
+            Assert.Equal(4613732, instance.FibonacciSum(4000000));
         }
 
         [Fact]
         public void CanGenerateListOfNumbers() {
-            var list = instance.GenerateList();
+            var list = instance.GenerateList(100);
 
             var current = 1;
             foreach (var num in list) {
