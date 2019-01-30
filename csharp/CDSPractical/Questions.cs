@@ -31,7 +31,7 @@ namespace CDSPractical
 
 			foreach (var item in source)
 			{
-				bool success = Int32.TryParse(item, out var number);
+				var success = Int32.TryParse(item, out var number);
 				if (success)
 					list.Add(number);
 			}
@@ -180,8 +180,8 @@ namespace CDSPractical
 		/// <returns></returns>
 		public int[] Sort(int[] source)
 		{
-			int count = source.Length;
-			bool swapped = true;
+			var count = source.Length;
+			var swapped = true;
 
 			while (swapped)
 			{
@@ -190,7 +190,7 @@ namespace CDSPractical
 				{
 					if (source[i] > source[i + 1])
 					{
-						int temp = source[i + 1];
+						var temp = source[i + 1];
 						source[i + 1] = source[i];
 						source[i] = temp;
 						swapped = true;
@@ -215,13 +215,13 @@ namespace CDSPractical
 		/// <returns></returns>
 		public int FibonacciSum(int max)
 		{
-			int firstNumber = 0;
-			int secondNumber = 1;
-			int sum = 0;
+			var firstNumber = 0;
+			var secondNumber = 1;
+			var sum = 0;
 
 			while (secondNumber <= max)
 			{
-				int temp = firstNumber;
+				var temp = firstNumber;
 				firstNumber = secondNumber;
 				secondNumber = temp + secondNumber;
 
@@ -242,8 +242,8 @@ namespace CDSPractical
 		public IEnumerable<int> GenerateList(int listLimit)
 		{
 			var ret = new List<int>();
-
 			var complete = false;
+
 			while (!complete)
 			{
 				var next = ret.Count + 1;

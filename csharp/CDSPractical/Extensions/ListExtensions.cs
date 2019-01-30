@@ -14,7 +14,7 @@ namespace CDSPractical.Extensions
 			var randomGenerator = new System.Random();
 			for (var i = 0; i < last; ++i)
 			{
-				int r = randomGenerator.Next(i, count);
+				var r = randomGenerator.Next(i, count);
 
 				while (r == i)
 				{
