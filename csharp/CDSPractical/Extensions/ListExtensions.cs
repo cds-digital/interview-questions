@@ -14,16 +14,16 @@ namespace CDSPractical.Extensions
 			var randomGenerator = new System.Random();
 			for (var i = 0; i < last; ++i)
 			{
-				var r = randomGenerator.Next(i, count);
+				var random = randomGenerator.Next(i, count);
 
-				while (r == i)
+				while (random == i)
 				{
-					r = randomGenerator.Next(i, count);
+					random = randomGenerator.Next(i, count);
 				}
 
 				var temp = list[i];
-				list[i] = list[r];
-				list[r] = temp;
+				list[i] = list[random];
+				list[random] = temp;
 			}
 		}		
 	}

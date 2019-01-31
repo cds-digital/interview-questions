@@ -129,8 +129,7 @@ namespace CDSPracticalTests {
         }
 
 	    [Fact]
-	    public void CanShuffleLarger()
-	    {
+	    public void CanShuffleLarger(){
 		    var originalList = new List<string> { "one", "two", "Three", "Four", "Five", "Six", "Seven"};
 		    var shuffledList = instance.Shuffle(originalList).ToList();
 		    var lastElement = originalList.Count - 1;
