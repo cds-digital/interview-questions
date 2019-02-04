@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 namespace CDSPractical {
@@ -21,8 +22,19 @@ namespace CDSPractical {
         /// </summary>
         /// <param name="source">An enumerable containing words</param>
         /// <returns></returns>
-        public IEnumerable<int> ExtractNumbers(IEnumerable<string> source) {
-            throw new NotImplementedException();
+        public IEnumerable<int> ExtractNumbers(IEnumerable<string> source)
+        {
+            var numbers = new List<int>();
+
+            foreach (var sourceString in source)
+            {
+                if (int.TryParse(sourceString, out var number))
+                {
+                    numbers.Add(number);
+                }
+            }
+
+            return numbers;
         }
 
         /// <summary>
@@ -66,8 +78,9 @@ namespace CDSPractical {
         /// <param name="first">First list of words</param>
         /// <param name="second">Second list of words</param>
         /// <returns></returns>
-        public string LongestCommonWord(IEnumerable<string> first, IEnumerable<string> second) {
-            throw new NotImplementedException();
+        public string LongestCommonWord(IEnumerable<string> first, IEnumerable<string> second)
+        {
+            return first.Intersect(second).OrderByDescending(x => x.Length).FirstOrDefault();
         }
 
         /// <summary>
@@ -82,8 +95,9 @@ namespace CDSPractical {
         /// </summary>
         /// <param name="km">distance in kilometers</param>
         /// <returns></returns>
-        public double DistanceInMiles(double km) {
-            throw new NotImplementedException();
+        public double DistanceInMiles(double km)
+        {
+            return km / 1.6;
         }
 
         /// <summary>
@@ -98,8 +112,9 @@ namespace CDSPractical {
         /// </summary>
         /// <param name="miles">distance in miles</param>
         /// <returns></returns>
-        public double DistanceInKm(double miles) {
-            throw new NotImplementedException();
+        public double DistanceInKm(double miles)
+        {
+            return miles * 1.6;
         }
 
         /// <summary>
@@ -121,7 +136,7 @@ namespace CDSPractical {
         /// <param name="word">The word to check</param>
         /// <returns></returns>
         public bool IsPalindrome(string word) {
-            throw new NotImplementedException();
+            return word == (string)word.Reverse();
         }
 
         /// <summary>
@@ -142,7 +157,7 @@ namespace CDSPractical {
         /// <param name="source"></param>
         /// <returns></returns>
         public IEnumerable<object> Shuffle(IEnumerable<object> source) {
-            throw new NotImplementedException();
+            return source.OrderBy(x => new Random().Next()).ToList();
         }
 
         /// <summary>
@@ -153,8 +168,23 @@ namespace CDSPractical {
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public int[] Sort(int[] source) {
-            throw new NotImplementedException();
+        public int[] Sort(int[] source)
+        {
+            var temp = 0;
+            for (var i = 0; i < source.Length; i++)
+            {
+                for (var j = i + 1; j < source.Length; j++)
+                {
+                    if (source[i] > source[j])
+                    {
+                        temp = source[j];
+                        source[j] = source[i];
+                        source[i] = temp;
+                    }
+                }
+            }
+
+            return source;
         }    
 
         /// <summary>
@@ -168,7 +198,26 @@ namespace CDSPractical {
         /// </summary>
         /// <returns></returns>
         public int FibonacciSum() {
-            throw new NotImplementedException();
+            // Generate a Fibonacci Sequence List with max value less than 4,000,000
+            var sequence = new List<int>();
+            var entry = 1;
+            do
+            {
+                sequence.Add(entry);
+                if (sequence.Count < 2)
+                {
+                    entry += sequence[0];
+
+                }
+                else
+                {
+                    entry += sequence[sequence.Count - 2];
+                }
+                
+            } while (entry < 4000000);
+
+            // Sum the even numbers
+            return sequence.Where(x => x % 2 == 0).Sum();
         }
 
         /// <summary>
@@ -188,7 +237,7 @@ namespace CDSPractical {
                     while (!complete) {                        
                         var next = ret.Count + 1;
                         Thread.Sleep(new Random().Next(1, 10));
-                        if (next <= 100) {
+                        if (next <= 100 && !ret.Contains(next)) {
                             ret.Add(next);
                         }
 
@@ -204,6 +253,7 @@ namespace CDSPractical {
                 threads[i].Join();
             }
 
+            ret.Sort();
             return ret;
         }
     }

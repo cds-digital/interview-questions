@@ -103,8 +103,13 @@ namespace CDSPracticalTests {
         }
 
         [Fact]
-        public void CanSort() {
-            throw new NotImplementedException();
+        public void CanSort()
+        {
+            var unsorted = new int[] {20, 65, 98, 71, 64, 11, 2, 80, 5, 6, 100, 50, 13, 9, 80, 454};
+
+            var sorted = new int[] { 2, 5, 6, 9, 11, 13, 20, 50, 64, 65, 71, 80, 80, 98, 100, 454 };
+
+            Assert.Equal(sorted, instance.Sort(unsorted));
         }
 
         [Fact]
