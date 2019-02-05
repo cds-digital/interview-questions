@@ -156,8 +156,26 @@ namespace CDSPractical {
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public IEnumerable<object> Shuffle(IEnumerable<object> source) {
-            return source.OrderBy(x => new Random().Next()).ToList();
+        public IEnumerable<object> Shuffle(IEnumerable<object> source)
+        {
+            var list = source.ToList();
+
+            var rnd = new Random();
+
+            for (var i = 0; i < list.Count - 1; i++)
+            {
+                var r = 0;
+                do
+                {
+                    r = rnd.Next(i, list.Count);
+                } while (r == i);
+
+                var temp = list[i];
+                list[i] = list[r];
+                list[r] = temp;
+            }
+
+            return list.AsEnumerable();
         }
 
         /// <summary>
@@ -237,8 +255,13 @@ namespace CDSPractical {
                     while (!complete) {                        
                         var next = ret.Count + 1;
                         Thread.Sleep(new Random().Next(1, 10));
-                        if (next <= 100 && !ret.Contains(next)) {
-                            ret.Add(next);
+                        // Lock the list
+                        lock (ret)
+                        {
+                            if (next <= 100 && !ret.Contains(next))
+                            {
+                                ret.Add(next);
+                            }
                         }
 
                         if (ret.Count >= 100) {
