@@ -1,5 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 
 namespace CDSPractical {
@@ -21,8 +23,13 @@ namespace CDSPractical {
         /// </summary>
         /// <param name="source">An enumerable containing words</param>
         /// <returns></returns>
-        public IEnumerable<int> ExtractNumbers(IEnumerable<string> source) {
-            throw new NotImplementedException();
+        public IEnumerable<int> ExtractNumbers(IEnumerable<string> source)
+        {
+            // Need to use an out var here for TryParse. As long as the list
+            // it small enough, it shouldn't cause significant memory issues.
+            return source
+                .Where(item => int.TryParse(item, out var temp))
+                .Select(int.Parse);
         }
 
         /// <summary>
@@ -66,8 +73,12 @@ namespace CDSPractical {
         /// <param name="first">First list of words</param>
         /// <param name="second">Second list of words</param>
         /// <returns></returns>
-        public string LongestCommonWord(IEnumerable<string> first, IEnumerable<string> second) {
-            throw new NotImplementedException();
+        public string LongestCommonWord(IEnumerable<string> first, IEnumerable<string> second)
+        {
+            return first
+                .Intersect(second)
+                .OrderByDescending(item => item.Length)
+                .FirstOrDefault();
         }
 
         /// <summary>
@@ -82,8 +93,9 @@ namespace CDSPractical {
         /// </summary>
         /// <param name="km">distance in kilometers</param>
         /// <returns></returns>
-        public double DistanceInMiles(double km) {
-            throw new NotImplementedException();
+        public double DistanceInMiles(double km)
+        {
+            return Math.Abs(km) / 1.6;
         }
 
         /// <summary>
@@ -98,8 +110,9 @@ namespace CDSPractical {
         /// </summary>
         /// <param name="miles">distance in miles</param>
         /// <returns></returns>
-        public double DistanceInKm(double miles) {
-            throw new NotImplementedException();
+        public double DistanceInKm(double miles)
+        {
+            return Math.Abs(miles) * 1.6;
         }
 
         /// <summary>
@@ -120,8 +133,43 @@ namespace CDSPractical {
         /// </summary>
         /// <param name="word">The word to check</param>
         /// <returns></returns>
-        public bool IsPalindrome(string word) {
-            throw new NotImplementedException();
+        public bool IsPalindrome(string word)
+        {
+            // Assumptions:
+            // - both upper and lower case versions of the same letter are treated as the same
+            //   (i.e. "A" and "a")
+            // - Method should check a single word, not a phrase
+            // - We should protect against strings which contain numbers
+            //   (i.e. if it contains a number, it's not a valid word - potentially controversial)
+            
+            // using a string.contains would be faster, but using a Regex means that
+            // we can pattern match
+            var search = new Regex("[a-zA-Z]+");
+            if (search.IsMatch(word))
+            {
+                var length = word.Length;
+                if (length == 1)
+                {
+                    // Can't be a palindrome as it's only one character long
+                    return false;
+                }
+                var forwardIndex = 0;
+                var reverseIndex = length - 1;
+                while (reverseIndex >= forwardIndex)
+                {
+                    if (Char.ToUpperInvariant(word[forwardIndex])
+                            .CompareTo(Char.ToUpperInvariant(word[reverseIndex])) != default(int))
+                    {
+                        return false;
+                    }
+                    forwardIndex++;
+                    reverseIndex--;
+                }
+
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -141,7 +189,8 @@ namespace CDSPractical {
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public IEnumerable<object> Shuffle(IEnumerable<object> source) {
+        public IEnumerable<object> Shuffle(IEnumerable<object> source)
+        {
             throw new NotImplementedException();
         }
 
@@ -153,9 +202,30 @@ namespace CDSPractical {
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public int[] Sort(int[] source) {
-            throw new NotImplementedException();
-        }    
+        public int[] Sort(int[] source)
+        {
+            // Assumptions:
+            // - Bubble sort seems fair enough here, as we haven't been told to expect a HUGE
+            //   range of values. Plus the simplicity of the task and the complexity of some
+            //   of the sorting algorithms seem to be at odds with each other
+            
+            var length = source.Length;
+            for (var reverseIndex = length - 1; reverseIndex > 0; reverseIndex--)
+            {
+                for (var forwardIndex = 0; forwardIndex < reverseIndex; forwardIndex++)
+                {
+                    // no need to swap
+                    if (source[forwardIndex] <= source[forwardIndex + 1]) continue;
+                    
+                    // Swap the values around
+                    var swap = source[forwardIndex + 1];
+                    source[forwardIndex + 1] = source[forwardIndex];
+                    source[forwardIndex] = swap;
+                }
+            }
+
+            return source;
+        }
 
         /// <summary>
         /// Each new term in the Fibonacci sequence is generated by adding the 
@@ -167,7 +237,8 @@ namespace CDSPractical {
         /// not exceed four million, find the sum of the even-valued terms.
         /// </summary>
         /// <returns></returns>
-        public int FibonacciSum() {
+        public int FibonacciSum()
+        {
             throw new NotImplementedException();
         }
 
@@ -177,7 +248,8 @@ namespace CDSPractical {
         /// This method is currently broken, fix it so that the tests pass.
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<int> GenerateList() {
+        public IEnumerable<int> GenerateList()
+        {
             var ret = new List<int>();
             var numThreads = 2;
 
