@@ -191,7 +191,8 @@ namespace CDSPractical {
         /// <returns></returns>
         public IEnumerable<object> Shuffle(IEnumerable<object> source)
         {
-            throw new NotImplementedException();
+            var rng = new Random();
+            return (IEnumerable<object>)source.OrderBy(item => rng.Next());
         }
 
         /// <summary>
