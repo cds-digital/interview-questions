@@ -65,3 +65,7 @@ typings/
 .vs
 bin
 obj
+
+# rider chaff
+**/.idea
+**/*DotSettings.user
