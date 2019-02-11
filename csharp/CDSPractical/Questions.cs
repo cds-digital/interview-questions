@@ -167,14 +167,13 @@ namespace CDSPractical
         /// <returns></returns>
         public IEnumerable<object> Shuffle(IEnumerable<object> source)
         {
-            var random = new Random();
-            var shuffledList = new List<object>();
-            foreach (var item in source)
+            var shuffled = source.OrderBy(x => Guid.NewGuid()).ToList();
+            while (shuffled.Equals(source))
             {
-                int newPosition = random.Next(source.Count());
-                shuffledList[newPosition] = item;
+                shuffled = source.OrderBy(x => Guid.NewGuid()).ToList();
             }
-            return shuffledList;
+
+            return shuffled;
         }
 
         /// <summary>
