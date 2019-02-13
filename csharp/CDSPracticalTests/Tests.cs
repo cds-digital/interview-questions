@@ -89,11 +89,11 @@ namespace CDSPracticalTests
         {
             var palindromes = new List<string>
             {
-
+                "racecar", "xinix", "elle"
             };
             var invalid = new List<string>
             {
-
+                "cheese", "car", "turtle"
             };
 
             foreach (var word in palindromes)
