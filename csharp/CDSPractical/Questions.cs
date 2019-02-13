@@ -167,10 +167,11 @@ namespace CDSPractical
         /// <returns></returns>
         public IEnumerable<object> Shuffle(IEnumerable<object> source)
         {
-            var shuffled = source.OrderBy(x => Guid.NewGuid()).ToList();
-            while (shuffled.Equals(source))
+            var sourceList = source.ToList();
+            var shuffled = sourceList.OrderBy(x => Guid.NewGuid()).ToList();
+            while (shuffled[0].Equals(sourceList[0]))
             {
-                shuffled = source.OrderBy(x => Guid.NewGuid()).ToList();
+                shuffled = sourceList.OrderBy(x => Guid.NewGuid()).ToList();
             }
 
             return shuffled;
