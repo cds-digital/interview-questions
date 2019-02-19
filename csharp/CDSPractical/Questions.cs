@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
+
 
 namespace CDSPractical {
     public class Questions {
@@ -22,7 +24,14 @@ namespace CDSPractical {
         /// <param name="source">An enumerable containing words</param>
         /// <returns></returns>
         public IEnumerable<int> ExtractNumbers(IEnumerable<string> source) {
-            throw new NotImplementedException();
+            var retVal = new List<int>();
+            foreach (string x in source) { 
+                if(int.TryParse(x, out int test)) 
+                {
+                    retVal.Add(test);
+                }
+            }
+            return retVal;
         }
 
         /// <summary>
@@ -67,7 +76,24 @@ namespace CDSPractical {
         /// <param name="second">Second list of words</param>
         /// <returns></returns>
         public string LongestCommonWord(IEnumerable<string> first, IEnumerable<string> second) {
-            throw new NotImplementedException();
+
+            var all = new List<String>(first);
+            all.AddRange(second);
+
+            int foundIdx =0;
+            int maxLen = 0;
+
+            //I'm sure you can do this in Linq, but nobody will be able to understand it ;)
+            for(var i = 0; i < all.Count; i++) {
+                var curLen = all[i].Length;
+                if (curLen > maxLen) {
+                    foundIdx = i;
+                    maxLen = curLen;
+                }
+            }
+
+            return all[foundIdx];
+
         }
 
         /// <summary>
@@ -83,7 +109,8 @@ namespace CDSPractical {
         /// <param name="km">distance in kilometers</param>
         /// <returns></returns>
         public double DistanceInMiles(double km) {
-            throw new NotImplementedException();
+            const double conv = 1.6;
+            return km / conv;
         }
 
         /// <summary>
@@ -99,7 +126,8 @@ namespace CDSPractical {
         /// <param name="miles">distance in miles</param>
         /// <returns></returns>
         public double DistanceInKm(double miles) {
-            throw new NotImplementedException();
+            const double conv = 1.6;
+            return miles * conv;
         }
 
         /// <summary>
@@ -121,7 +149,10 @@ namespace CDSPractical {
         /// <param name="word">The word to check</param>
         /// <returns></returns>
         public bool IsPalindrome(string word) {
-            throw new NotImplementedException();
+            char[] myChar = word.ToCharArray();
+            Array.Reverse(myChar);
+            var test = new string(myChar).ToUpper();
+            return (test == word.ToUpper()) ? true : false;
         }
 
         /// <summary>
@@ -142,7 +173,23 @@ namespace CDSPractical {
         /// <param name="source"></param>
         /// <returns></returns>
         public IEnumerable<object> Shuffle(IEnumerable<object> source) {
-            throw new NotImplementedException();
+
+            var originalList = new List<Object>(source);
+            var r = new Random();
+
+            int mid = originalList.Count / 2;
+
+            var ret = new List<Object>();
+
+            //move everything from middle of the list to the front
+            ret.AddRange(originalList.GetRange(mid, originalList.Count- mid));
+
+            //move everything from the start of the list to the back
+            ret.AddRange(originalList.GetRange(0, mid));
+            return ret;
+
+
+
         }
 
         /// <summary>
@@ -154,7 +201,18 @@ namespace CDSPractical {
         /// <param name="source"></param>
         /// <returns></returns>
         public int[] Sort(int[] source) {
-            throw new NotImplementedException();
+
+            for (var i = 1; i < source.Length; i++) {
+                var x = source[i];
+                var y = source[i - 1];
+                if (x < y ) {
+                    source[i - 1] = x;
+                    source[i] = y;
+                    Sort(source);
+                    break;
+                }
+            }
+            return source;
         }    
 
         /// <summary>
@@ -168,7 +226,21 @@ namespace CDSPractical {
         /// </summary>
         /// <returns></returns>
         public int FibonacciSum() {
-            throw new NotImplementedException();
+
+            int sumOfEvens = 2;
+            List<int> fibs = new List<int>() {1,2};
+
+            while(fibs[fibs.Count-1] <= 4000000)
+            {
+                int next = fibs[fibs.Count - 2] + fibs[fibs.Count - 1];
+                fibs.Add(next);
+                if (next % 2 == 0) {
+                    sumOfEvens += next;
+                }
+            }
+
+            return sumOfEvens; 
+
         }
 
         /// <summary>
@@ -177,6 +249,7 @@ namespace CDSPractical {
         /// This method is currently broken, fix it so that the tests pass.
         /// </summary>
         /// <returns></returns>
+
         public IEnumerable<int> GenerateList() {
             var ret = new List<int>();
             var numThreads = 2;
@@ -185,15 +258,18 @@ namespace CDSPractical {
             for (var i = 0; i < numThreads; i++) {
                 threads[i] = new Thread(() => {
                     var complete = false;
-                    while (!complete) {                        
-                        var next = ret.Count + 1;
-                        Thread.Sleep(new Random().Next(1, 10));
-                        if (next <= 100) {
-                            ret.Add(next);
-                        }
-
-                        if (ret.Count >= 100) {
-                            complete = true;
+                    while (!complete) {
+                        lock (ret) //causes any other threads to wait until this lock has been released.
+                        {
+                            int next = ret.Count + 1;
+                            Thread.Sleep(new Random().Next(1, 10));
+                            if (next <= 100)
+                            {
+                                ret.Add(next);
+                            }
+                            else {
+                                complete = true;
+                            }
                         }
                     }                    
                 });

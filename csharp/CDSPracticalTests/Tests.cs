@@ -82,11 +82,18 @@ namespace CDSPracticalTests {
         [Fact]
         public void IsPalindrome() {
             var palindromes = new List<string> {
-                
+                "Rotor",
+                "Radar",
+                "mIniM",
+                "cIviC",
             };
             var invalid = new List<string> {
-                
+                "random",
+                "Craig",
+                "This worn't work!"
             };
+
+            Assert.NotEmpty(palindromes);
 
             foreach (var word in palindromes) {
                 Assert.True(instance.IsPalindrome(word));
@@ -100,11 +107,49 @@ namespace CDSPracticalTests {
         [Fact]
         public void CanShuffle() {
             Assert.Equal(new List<string> { "two", "one" }, instance.Shuffle(new List<string> { "one", "two" }));
+
+            Assert.Equal(new List<string> { "one", "two", "three", "four" }, instance.Shuffle(new List<string> {"three", "four", "one", "two" }));
+            Assert.Equal(new List<string> { "one", "two", "three", "four", "five" }, instance.Shuffle(new List<string> { "four", "five", "one", "two", "three" }));
+
+            int x = 5;
+            int y = x / 2;
+            System.Diagnostics.Debug.WriteLine(y);
+
+
+
+
         }
 
         [Fact]
         public void CanSort() {
-            throw new NotImplementedException();
+
+            var sorted = new int[10];
+            sorted[0] = 1;
+            sorted[1] = 2;
+            sorted[2] = 3;
+            sorted[3] = 4;
+            sorted[4] = 5;
+            sorted[5] = 6;
+            sorted[6] = 7;
+            sorted[7] = 8;
+            sorted[8] = 9;
+            sorted[9] = 10;
+
+            var unSorted = new int[10];
+            unSorted[0] = 3;
+            unSorted[1] = 10;
+            unSorted[2] = 7;
+            unSorted[3] = 2;
+            unSorted[4] = 9;
+            unSorted[5] = 1;
+            unSorted[6] = 6;
+            unSorted[7] = 4;
+            unSorted[8] = 8;
+            unSorted[9] = 5;
+
+            Assert.Equal(sorted, instance.Sort(unSorted));
+
+
         }
 
         [Fact]
