@@ -117,7 +117,7 @@ namespace CDSPractical {
         /// <param name="miles">distance in miles</param>
         /// <returns></returns>
         public double DistanceInKm(double miles) {
-            return km*(1.6);
+            return miles*(1.6);
         }
 
         /// <summary>
