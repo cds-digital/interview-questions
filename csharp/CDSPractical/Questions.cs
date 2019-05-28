@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Linq;
+using System.IO;
 
 namespace CDSPractical {
     public class Questions {
@@ -18,12 +20,22 @@ namespace CDSPractical {
         ///   123,
         ///   234
         /// }
+        /// 
+        
         /// </summary>
         /// <param name="source">An enumerable containing words</param>
         /// <returns></returns>
         public IEnumerable<int> ExtractNumbers(IEnumerable<string> source) {
-            throw new NotImplementedException();
-        }
+            List<int> result = new List<int>();
+            foreach (string value in source)
+            {
+                int n;
+                bool isNumeric = int.TryParse(value, out n);
+                if (isNumeric)
+                    result.Add(n);
+            }
+            return result;
+    }
 
         /// <summary>
         /// Given two enumerables of strings, find the longest common word.
@@ -67,7 +79,30 @@ namespace CDSPractical {
         /// <param name="second">Second list of words</param>
         /// <returns></returns>
         public string LongestCommonWord(IEnumerable<string> first, IEnumerable<string> second) {
-            throw new NotImplementedException();
+        HashSet<string> hashSet = new HashSet<string>();
+
+            foreach (string word in first) // moving first to hashset
+            {
+                hashSet.Add(word);
+            }
+
+            int matchingWordSize = 0;
+            string matchingWord = "";
+
+            foreach (string word in second) // looping through second
+            {
+                if (!hashSet.Contains(word)) // finding common word
+                {
+                    continue;
+                }
+                else if (matchingWordSize < word.Length) // storing longest common word
+                {
+                    matchingWordSize = word.Length;
+                    matchingWord = word;
+                }
+            }
+
+            return matchingWord;
         }
 
         /// <summary>
@@ -83,8 +118,10 @@ namespace CDSPractical {
         /// <param name="km">distance in kilometers</param>
         /// <returns></returns>
         public double DistanceInMiles(double km) {
-            throw new NotImplementedException();
-        }
+            double result = km * 0.6;
+            result = Math.Ceiling(Math.Round(result, 2)); // converting to miles
+            return  result;
+         }
 
         /// <summary>
         /// Write a method that converts miles to kilometers, give that there are
@@ -99,7 +136,7 @@ namespace CDSPractical {
         /// <param name="miles">distance in miles</param>
         /// <returns></returns>
         public double DistanceInKm(double miles) {
-            throw new NotImplementedException();
+            return miles * 1.6;
         }
 
         /// <summary>
@@ -121,7 +158,19 @@ namespace CDSPractical {
         /// <param name="word">The word to check</param>
         /// <returns></returns>
         public bool IsPalindrome(string word) {
-            throw new NotImplementedException();
+            //Reverse the string
+            if (word == null || word.Length == 0)
+            {
+                return false;
+            }
+
+            //Reverse the string
+            char[] reverse = new char[word.Length];
+            for (int i = word.Length - 1, j = 0; i >= 0; i--, j++)
+            {
+                reverse[j] = word[i];
+            }
+            return word.CompareTo(reverse.ToString()) == 0 ? true : false; //compare original and reverse string
         }
 
         /// <summary>
@@ -142,7 +191,24 @@ namespace CDSPractical {
         /// <param name="source"></param>
         /// <returns></returns>
         public IEnumerable<object> Shuffle(IEnumerable<object> source) {
-            throw new NotImplementedException();
+            if (source == null)
+            {
+                return null;
+            }
+
+            object[] sourceObjects = source.ToArray<object>();
+            int lastObjectIndex = sourceObjects.Length - 1;
+            Random rand = new Random(); 
+
+            for (int i = 0; i <= lastObjectIndex; i++)
+            {
+                int swapIndex = rand.Next(lastObjectIndex); // finding random index and swapping
+                object temp = sourceObjects[i];
+                sourceObjects[i] = sourceObjects[swapIndex];
+                sourceObjects[swapIndex] = temp;
+            }
+
+            return sourceObjects;
         }
 
         /// <summary>
@@ -153,8 +219,20 @@ namespace CDSPractical {
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public int[] Sort(int[] source) {
-            throw new NotImplementedException();
+	    public int[] Sort(int[] source) {
+            int[] sorted = new int[] { };
+            for (int i = 0; i < source.Count(); i++)
+            {
+                var x = source[i];
+                var j = i;
+                while (j > 0 && source[j - 1] > x)
+                {
+                    source[j] = source[j - 1];
+                    j = j - 1;
+                }
+                sorted[j] = x;
+            }
+            return sorted;
         }    
 
         /// <summary>
@@ -168,8 +246,34 @@ namespace CDSPractical {
         /// </summary>
         /// <returns></returns>
         public int FibonacciSum() {
-            throw new NotImplementedException();
+            // Generated Fibonicci series and sum in one function 
+            // result will have fibonicci series
+            int first = 0;
+            int second = 1;
+            IList<int> result = new List<int> { }; // fibonicci series list . This code should go under getfibonicci
+            result.Add(first);
+            result.Add(second);
+            int evenCount = 0;
+            var sum = 0;
+            while (second < 4000000) // term should be less than 4 million
+            {
+                sum = first + second;
+                if (sum % 2 == 0)
+                {
+                    evenCount += sum;
+                }
+                result.Add(sum);
+                first = second;
+                second = sum;
+            }
+            return evenCount;
         }
+
+  /*      public IEnumerable<int> getfibonicci()
+        {
+
+            
+        } */
 
         /// <summary>
         /// Generate a list of integers from 1 to 100.
@@ -187,7 +291,8 @@ namespace CDSPractical {
                     var complete = false;
                     while (!complete) {                        
                         var next = ret.Count + 1;
-                        Thread.Sleep(new Random().Next(1, 10));
+                        // Thread.Sleep(new Random().Next(1, 10)); 
+                        Thread.Sleep(new Random().Next(1, 100)); // change
                         if (next <= 100) {
                             ret.Add(next);
                         }
