@@ -71,22 +71,31 @@ namespace CDSPracticalTests {
 
         [Fact]
         public void CanGetDistanceInMiles() {
+            /*Positive Test*/
             Assert.Equal(10.00, instance.DistanceInMiles(16.00));
+
+            /*Negative Test*/
+            Assert.Equal(0, instance.DistanceInMiles(-16.00));
         }
+
+        
 
         [Fact]
         public void CanGetDistanceInKilometers() {
+            /*Positive Test*/
             Assert.Equal(16.00, instance.DistanceInKm(10.00));
+
+            /*Negative Test*/
+            Assert.Equal(0, instance.DistanceInKm(-1));
         }
 
         [Fact]
         public void IsPalindrome() {
             var palindromes = new List<string> {
-                
+                "aka"
             };
             var invalid = new List<string> {
-                
-            };
+                "aks" ,"test"           };
 
             foreach (var word in palindromes) {
                 Assert.True(instance.IsPalindrome(word));
@@ -104,12 +113,14 @@ namespace CDSPracticalTests {
 
         [Fact]
         public void CanSort() {
-            throw new NotImplementedException();
+            instance.Sort(new int[] { 1,5,3});
         }
 
         [Fact]
         public void CanSumFibonacciNumbers() {
             Assert.Equal(4613732, instance.FibonacciSum());
+
+//            Assert.Equal(4613732, instance.FibonacciSum());
         }
 
         [Fact]
