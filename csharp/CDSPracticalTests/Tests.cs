@@ -44,6 +44,9 @@ namespace CDSPracticalTests {
                     "goofy",
                     "sweet",
                     "mean",
+                    null,
+                    "",
+                    "  ",
                     "show",
                     "fade",
                     "scissors",
@@ -58,6 +61,9 @@ namespace CDSPracticalTests {
                     "arm",
                     "rabbit",
                     "force",
+                    null,
+                    "",
+                    "  ",
                     "wandering",
                     "scissors",
                     "fair",
@@ -82,10 +88,15 @@ namespace CDSPracticalTests {
         [Fact]
         public void IsPalindrome() {
             var palindromes = new List<string> {
-                
+                "",
+                "   ",
+                null,
+                "Reviver",
+                "mAdaM"
             };
             var invalid = new List<string> {
-                
+                "Manish",
+                "Neelesh"
             };
 
             foreach (var word in palindromes) {
@@ -104,7 +115,15 @@ namespace CDSPracticalTests {
 
         [Fact]
         public void CanSort() {
-            throw new NotImplementedException();
+            int[] inputNumberArray = {
+                1, 99, 8, 20, -1, 26, 3
+            };
+
+            int[] outputSortedArray = {
+                -1, 1, 3, 8, 20, 26, 99
+            };
+
+            Assert.Equal(outputSortedArray, instance.Sort(inputNumberArray));
         }
 
         [Fact]
