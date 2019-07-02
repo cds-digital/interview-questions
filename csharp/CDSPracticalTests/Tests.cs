@@ -49,6 +49,8 @@ namespace CDSPracticalTests
                     "sweet",
                     "mean",
                     "show",
+                    "",
+                    "  ",
                     "fade",
                     "scissors",
                     "shoes",
@@ -62,6 +64,8 @@ namespace CDSPracticalTests
                     "arm",
                     "rabbit",
                     "force",
+                    "",
+                    "  ",
                     "wandering",
                     "scissors",
                     "fair",
@@ -90,10 +94,18 @@ namespace CDSPracticalTests
         {
             var palindromes = new List<string>
             {
-
+                "mam",
+                "",
+                " ",
+                null,
+                "eye",
+                "SAS",
+                "Olo"
             };
             var invalid = new List<string>
             {
+                "sandeep",
+                "SANdeep",              
 
             };
 
@@ -117,7 +129,15 @@ namespace CDSPracticalTests
         [Fact]
         public void CanSort()
         {
-            throw new NotImplementedException();
+            int[] inputValues = {
+                0, 45, 8, 76, -1, 1, 27
+            };
+
+            int[] outputValues = {
+                -1,0,1,8,27,45,76
+            };
+
+            Assert.Equal(outputValues, instance.Sort(inputValues));
         }
 
         [Fact]
