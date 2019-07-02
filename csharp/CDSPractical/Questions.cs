@@ -1,9 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
-namespace CDSPractical {
-    public class Questions {
+namespace CDSPractical
+{
+    public class Questions
+    {
+        public const int Fibonaccifinalvalue = 4000000;
+        public const double KmMi = 1.6;
         /// <summary>
         /// Given an enumerable of strings, attempt to parse each string and if 
         /// it is an integer, add it to the returned enumerable.
@@ -21,8 +26,14 @@ namespace CDSPractical {
         /// </summary>
         /// <param name="source">An enumerable containing words</param>
         /// <returns></returns>
-        public IEnumerable<int> ExtractNumbers(IEnumerable<string> source) {
-            throw new NotImplementedException();
+        public IEnumerable<int> ExtractNumbers(IEnumerable<string> source)
+        {
+            var resultdata = new List<int>();
+            foreach (var inputString in source)
+                if (int.TryParse(inputString, out var number))
+                    resultdata.Add(number);
+
+            return resultdata;
         }
 
         /// <summary>
@@ -66,8 +77,14 @@ namespace CDSPractical {
         /// <param name="first">First list of words</param>
         /// <param name="second">Second list of words</param>
         /// <returns></returns>
-        public string LongestCommonWord(IEnumerable<string> first, IEnumerable<string> second) {
-            throw new NotImplementedException();
+        public string LongestCommonWord(IEnumerable<string> first, IEnumerable<string> second)
+        {
+            var commonList = first.Intersect(second);
+            var returnValue = string.Empty;
+            foreach (var value in commonList)
+                if (!string.IsNullOrEmpty(value) && value.Length > returnValue.Length)
+                    returnValue = value;
+            return returnValue;
         }
 
         /// <summary>
@@ -82,8 +99,9 @@ namespace CDSPractical {
         /// </summary>
         /// <param name="km">distance in kilometers</param>
         /// <returns></returns>
-        public double DistanceInMiles(double km) {
-            throw new NotImplementedException();
+        public double DistanceInMiles(double km)
+        {
+            return km / KmMi;
         }
 
         /// <summary>
@@ -98,8 +116,9 @@ namespace CDSPractical {
         /// </summary>
         /// <param name="miles">distance in miles</param>
         /// <returns></returns>
-        public double DistanceInKm(double miles) {
-            throw new NotImplementedException();
+        public double DistanceInKm(double miles)
+        {
+            return miles * KmMi;
         }
 
         /// <summary>
@@ -120,8 +139,26 @@ namespace CDSPractical {
         /// </summary>
         /// <param name="word">The word to check</param>
         /// <returns></returns>
-        public bool IsPalindrome(string word) {
-            throw new NotImplementedException();
+        public bool IsPalindrome(string word)
+        {
+            if (string.IsNullOrEmpty(word))
+                return true;
+            var startLetter = 0;
+            var lastLetter = word.Length - 1;
+            do
+            {
+                if (char.ToLower(word[startLetter]) == char.ToLower(word[lastLetter]))
+                {
+                    startLetter++;
+                    lastLetter--;
+                }
+                else
+                {
+                    return false;
+                }
+            } while (startLetter < lastLetter);
+
+            return true;
         }
 
         /// <summary>
@@ -141,8 +178,17 @@ namespace CDSPractical {
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public IEnumerable<object> Shuffle(IEnumerable<object> source) {
-            throw new NotImplementedException();
+        public IEnumerable<object> Shuffle(IEnumerable<object> source)
+        {
+            IEnumerable<object> ShuffleInternal(IEnumerable<object> list)
+            {
+                var randomndValue = new Random();
+                return list.OrderBy(item => randomndValue.Next()).ToList();
+            }
+
+            var target = ShuffleInternal(source);
+            while (source.SequenceEqual(target)) target = ShuffleInternal(source);
+            return target;
         }
 
         /// <summary>
@@ -153,9 +199,20 @@ namespace CDSPractical {
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public int[] Sort(int[] source) {
-            throw new NotImplementedException();
-        }    
+        public int[] Sort(int[] source)
+        {
+            var arrayLength = source.Length - 1;
+            for (var i = 0; i < arrayLength; i++)
+                for (var j = 0; j < arrayLength - i; j++)
+                    if (source[j] > source[j + 1])
+                    {
+                        var temp = source[j];
+                        source[j] = source[j + 1];
+                        source[j + 1] = temp;
+                    }
+
+            return source;
+        }
 
         /// <summary>
         /// Each new term in the Fibonacci sequence is generated by adding the 
@@ -167,8 +224,21 @@ namespace CDSPractical {
         /// not exceed four million, find the sum of the even-valued terms.
         /// </summary>
         /// <returns></returns>
-        public int FibonacciSum() {
-            throw new NotImplementedException();
+        public int FibonacciSum()
+        {
+            var firstValue = 1;
+            var secondValue = 2;
+            var sum = 0;
+            while (secondValue < Fibonaccifinalvalue)
+            {
+                if (secondValue % 2 == 0)
+                    sum += secondValue;
+                var tempFirstValue = firstValue;
+                firstValue = secondValue;
+                secondValue = tempFirstValue + secondValue;
+            }
+
+            return sum;
         }
 
         /// <summary>
@@ -177,33 +247,35 @@ namespace CDSPractical {
         /// This method is currently broken, fix it so that the tests pass.
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<int> GenerateList() {
+        public IEnumerable<int> GenerateList()
+        {
             var ret = new List<int>();
             var numThreads = 2;
-
-            Thread[] threads = new Thread[numThreads];
-            for (var i = 0; i < numThreads; i++) {
-                threads[i] = new Thread(() => {
+            var listLock = new object();
+            var threads = new Thread[numThreads];
+            for (var i = 0; i < numThreads; i++)
+            {
+                threads[i] = new Thread(() =>
+                {
                     var complete = false;
-                    while (!complete) {                        
+                    while (!complete)
+                    {
                         var next = ret.Count + 1;
                         Thread.Sleep(new Random().Next(1, 10));
-                        if (next <= 100) {
-                            ret.Add(next);
-                        }
+                        if (next <= 100)
+                            lock (listLock)
+                            {
+                                if (!ret.Contains(next))
+                                    ret.Add(next);
+                            }
 
-                        if (ret.Count >= 100) {
-                            complete = true;
-                        }
-                    }                    
+                        if (ret.Count >= 100) complete = true;
+                    }
                 });
                 threads[i].Start();
             }
 
-            for (var i = 0; i < numThreads; i++) {
-                threads[i].Join();
-            }
-
+            for (var i = 0; i < numThreads; i++) threads[i].Join();
             return ret;
         }
     }
