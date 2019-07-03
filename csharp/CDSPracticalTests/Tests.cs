@@ -5,8 +5,12 @@ using Xunit;
 
 namespace CDSPracticalTests {
     public class Tests {
+       
+        #region Arrange
         Questions instance = new Questions();
+        #endregion
 
+        #region UnitTests
         [Fact]
         public void CanExtractNumbers() {
             Assert.Equal(new List<int> {
@@ -33,14 +37,24 @@ namespace CDSPracticalTests {
                 "234.23",
                 "345"
             }));
+
+            Assert.Equal(new List<int> {
+                
+            }, instance.ExtractNumbers(new List<string> {
+                "hello",
+                "there"
+                
+            }));
         }
 
+        
         [Fact]
         public void CanGetLongestCommonWord() {
-            Assert.Equal("wandering", instance.LongestCommonWord(
+            Assert.Equal("wanderlust", instance.LongestCommonWord(
                 new List<string> {
                     "love",
                     "wandering",
+                    "wanderlust",
                     "goofy",
                     "sweet",
                     "mean",
@@ -59,6 +73,8 @@ namespace CDSPracticalTests {
                     "rabbit",
                     "force",
                     "wandering",
+                    "WanderLust",
+                    string.Empty,
                     "scissors",
                     "fair",
                     "homely",
@@ -82,10 +98,11 @@ namespace CDSPracticalTests {
         [Fact]
         public void IsPalindrome() {
             var palindromes = new List<string> {
+                "Anna","Nayan","Kayak","rotor"
                 
             };
             var invalid = new List<string> {
-                
+                "Annaa","yujsa" ,"IamNotPalindrome"
             };
 
             foreach (var word in palindromes) {
@@ -102,9 +119,17 @@ namespace CDSPracticalTests {
             Assert.Equal(new List<string> { "two", "one" }, instance.Shuffle(new List<string> { "one", "two" }));
         }
 
-        [Fact]
-        public void CanSort() {
-            throw new NotImplementedException();
+
+        [Trait("Categories", "Unit")]
+        [Theory]
+        [MemberData(nameof(TestDataForCanShort))]
+        public void CanSort(int[] input, int[] expected) {
+
+            //act
+           var output=  instance.Sort(input);
+            //assert
+           Assert.Equal(expected, output);
+            
         }
 
         [Fact]
@@ -122,5 +147,16 @@ namespace CDSPracticalTests {
                 current++;
             }
         }
+        #endregion
+
+        #region MemberData
+        public static IEnumerable<object[]> TestDataForCanShort =>
+        new List<object[]>
+        {
+            new object[] { new int[] { 1, 3, 4, 2 }, new int[] { 1, 2, 3, 4 } },
+            new object[] { new int[] { 5, 4, 8, 2 }, new int[] { 2, 4, 5, 8 } },
+            new object[] { new int[] { }, new int[] { } },
+        };
+        #endregion
     }
 }
