@@ -217,20 +217,19 @@ namespace CDSPractical
         /// <returns></returns>
         public int[] Sort(int[] source)
         {
-            int temp = 0;
-            int[] result;
-            for (int i = 0; i <= source.Length - 1; i++)
+            int a = 0, b = 1, c = 0;
+            List<int> d = new List<int>();
+            for (int i = 0; i < 33; i++)
             {
-                for (int j = i + 1; j < source.Length; j++)
+                c = a + b;
+                if (c % 2 == 0)
                 {
-                    if (source[i] > source[j])
-                    {
-                        temp = source[i];
-                        source[i] = source[j];
-                        source[j] = temp;
-                    }
+                    d.Add(c);
                 }
+                a = b;
+                b = c;               
             }
+            
 
             return source;
             // throw new NotImplementedException();
