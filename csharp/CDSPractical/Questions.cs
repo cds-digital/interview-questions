@@ -217,21 +217,22 @@ namespace CDSPractical
         /// <returns></returns>
         public int[] Sort(int[] source)
         {
-            int a = 0, b = 1, c = 0;
-            List<int> d = new List<int>();
-            for (int i = 0; i < 33; i++)
+            int temp = 0;           
+            for (int i = 0; i <= source.Length - 1; i++)
             {
-                c = a + b;
-                if (c % 2 == 0)
+                for (int j = i + 1; j < source.Length; j++)
                 {
-                    d.Add(c);
+                    if (source[i] > source[j])
+                    {
+                        temp = source[i];
+                        source[i] = source[j];
+                        source[j] = temp;
+                    }
                 }
-                a = b;
-                b = c;               
             }
-            
 
             return source;
+
             // throw new NotImplementedException();
         }
 
@@ -247,10 +248,9 @@ namespace CDSPractical
         /// <returns></returns>
         public int FibonacciSum()
         {
-            int a = 1, b = 2, c = 2;
+            int a = 0, b = 1, c = 0;
             List<int> d = new List<int>();
-            d.Add(c);
-            for (int i = 2; i <= 31; i++)
+            for (int i = 0; i < 33; i++)
             {
                 c = a + b;
                 if (c % 2 == 0)
@@ -260,6 +260,7 @@ namespace CDSPractical
                 a = b;
                 b = c;
             }
+
             return d.Sum();
             //throw new NotImplementedException();
         }
