@@ -18,7 +18,7 @@ namespace CDSPracticalTests {
                 "234"
             }));
 
-            Assert.Equal(new List<int> {}, instance.ExtractNumbers(new List<string> {                
+            Assert.Equal(new List<int> {}, instance.ExtractNumbers(new List<string> {
                 "hello",
                 "there"
             }));
@@ -82,10 +82,10 @@ namespace CDSPracticalTests {
         [Fact]
         public void IsPalindrome() {
             var palindromes = new List<string> {
-                
+                 "ANNA","1221","Level","madam"
             };
             var invalid = new List<string> {
-                
+                "abcd","1254"
             };
 
             foreach (var word in palindromes) {
@@ -104,7 +104,7 @@ namespace CDSPracticalTests {
 
         [Fact]
         public void CanSort() {
-            throw new NotImplementedException();
+            Assert.Equal(new int[] { 2, 5, 6, 7, 11, 19, 25 }, instance.Sort(new int[] { 25, 5, 2, 11, 7, 6, 19 }));
         }
 
         [Fact]
