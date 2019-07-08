@@ -22,7 +22,18 @@ namespace CDSPractical {
         /// <param name="source">An enumerable containing words</param>
         /// <returns></returns>
         public IEnumerable<int> ExtractNumbers(IEnumerable<string> source) {
-            throw new NotImplementedException();
+            List<int> integerslist = new List<int>();
+            foreach (var elements in source)
+            {
+                int n;
+                bool isNumeric = int.TryParse(ele, out n);
+                if (isNumeric)
+                {
+                    integerslist.Add(n);
+                }
+            }
+            IEnumerable<int> numbers = integerslist;
+            return numbers;
         }
 
         /// <summary>
@@ -67,7 +78,28 @@ namespace CDSPractical {
         /// <param name="second">Second list of words</param>
         /// <returns></returns>
         public string LongestCommonWord(IEnumerable<string> first, IEnumerable<string> second) {
-            throw new NotImplementedException();
+            HashSet<string> lwrds = new HashSet<string>();
+            int max = 0;
+            string maxword = "";
+            foreach (var element in first)
+            {
+                lwrds.Add(element);
+
+            }
+
+            foreach (var element in second)
+            {
+                if (lwrds.Contains(element))
+                {
+                    int currentlength = element.Length;
+                    if (max < currentlength)
+                    {
+                        max = currentlength;
+                        maxword = element;
+                    }
+                }
+            }
+            return maxword;
         }
 
         /// <summary>
@@ -83,7 +115,7 @@ namespace CDSPractical {
         /// <param name="km">distance in kilometers</param>
         /// <returns></returns>
         public double DistanceInMiles(double km) {
-            throw new NotImplementedException();
+            return km / 1.6;
         }
 
         /// <summary>
@@ -99,7 +131,7 @@ namespace CDSPractical {
         /// <param name="miles">distance in miles</param>
         /// <returns></returns>
         public double DistanceInKm(double miles) {
-            throw new NotImplementedException();
+            return miles * 1.6;
         }
 
         /// <summary>
@@ -121,7 +153,19 @@ namespace CDSPractical {
         /// <param name="word">The word to check</param>
         /// <returns></returns>
         public bool IsPalindrome(string word) {
-            throw new NotImplementedException();
+            string revs = "";
+            for (int i = word.Length - 1; i >= 0; i--) 
+            {
+                revs += word[i].ToString();
+            }
+            if (revs == word) // Checking whether the given word is palindrome or not  
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }            
         }
 
         /// <summary>
@@ -142,7 +186,14 @@ namespace CDSPractical {
         /// <param name="source"></param>
         /// <returns></returns>
         public IEnumerable<object> Shuffle(IEnumerable<object> source) {
-            throw new NotImplementedException();
+            List<object> ilist = new List<object>();
+            foreach (object item in source)
+            {
+                ilist.Add(item);
+            }
+            ilist.Reverse();
+            IEnumerable<object> nums = integerslist;
+            return nums;
         }
 
         /// <summary>
@@ -154,7 +205,16 @@ namespace CDSPractical {
         /// <param name="source"></param>
         /// <returns></returns>
         public int[] Sort(int[] source) {
-            throw new NotImplementedException();
+            int tmp;
+            for (int i = 0; i < source.Length - 1; i++)
+                for (int j = i + 1; j < source.Length; j++)
+                    if (source[i] > source[j])
+                    {
+                        tmp = source[i];
+                        source[i] = source[j];
+                        source[j] = tmp;
+                    }
+            return source;
         }    
 
         /// <summary>
@@ -168,7 +228,19 @@ namespace CDSPractical {
         /// </summary>
         /// <returns></returns>
         public int FibonacciSum() {
-            throw new NotImplementedException();
+            int maxValue = 4000000;  //By considering the terms in the Fibonacci sequence whose values do not exceed four million
+            int i = 0, j = 1, k = 0;
+            int evtSum = 0; //sum of the even-valued terms
+
+            while (c < maxValue)
+            {
+                k = i + j;
+                if (k % 2 == 0) { evtSum += k; } //Checking for the even-valued terms 
+                i = j;
+                j = k;
+            }
+
+            return evtSum;
         }
 
         /// <summary>
@@ -185,15 +257,20 @@ namespace CDSPractical {
             for (var i = 0; i < numThreads; i++) {
                 threads[i] = new Thread(() => {
                     var complete = false;
-                    while (!complete) {                        
-                        var next = ret.Count + 1;
-                        Thread.Sleep(new Random().Next(1, 10));
-                        if (next <= 100) {
-                            ret.Add(next);
-                        }
+                    while (!complete) {
+                        lock (ret)     //Added this lock condition to fix the broken code
+                        {
+                            var next = ret.Count + 1;
+                            Thread.Sleep(new Random().Next(1, 10));
+                            if (next <= 100)
+                            {
+                                ret.Add(next);
+                            }
 
-                        if (ret.Count >= 100) {
-                            complete = true;
+                            if (ret.Count >= 100)
+                            {
+                                complete = true;
+                            }
                         }
                     }                    
                 });
