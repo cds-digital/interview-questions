@@ -1,9 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
-namespace CDSPractical {
-    public class Questions {
+namespace CDSPractical
+{
+    public class Questions
+    {
+        const double KMPerMile = 1.6;
+        const long MaxTerm = 4000000;
         /// <summary>
         /// Given an enumerable of strings, attempt to parse each string and if 
         /// it is an integer, add it to the returned enumerable.
@@ -21,8 +26,19 @@ namespace CDSPractical {
         /// </summary>
         /// <param name="source">An enumerable containing words</param>
         /// <returns></returns>
-        public IEnumerable<int> ExtractNumbers(IEnumerable<string> source) {
-            throw new NotImplementedException();
+        public IEnumerable<int> ExtractNumbers(IEnumerable<string> source)
+        {
+            IList<int> result = new List<int>();
+
+            foreach (var value in source)
+            {
+                int number = 0;
+                if (int.TryParse(value, out number)) //try to read integer value
+                {
+                    result.Add(number);
+                }
+            }
+            return result;
         }
 
         /// <summary>
@@ -66,10 +82,20 @@ namespace CDSPractical {
         /// <param name="first">First list of words</param>
         /// <param name="second">Second list of words</param>
         /// <returns></returns>
-        public string LongestCommonWord(IEnumerable<string> first, IEnumerable<string> second) {
-            throw new NotImplementedException();
-        }
+        public string LongestCommonWord(IEnumerable<string> first, IEnumerable<string> second)
+        {
+            
+            var commonWords = from word1 in first
+                              join
+                              word2 in second on word1 equals word2
+                              select word1;
 
+            if (commonWords.Count() > 0)
+            {
+                return commonWords.OrderByDescending(w => w.Length).FirstOrDefault();
+            }
+            return string.Empty;
+        }
         /// <summary>
         /// Write a method that converts kilometers to miles, given that there are
         /// 1.6 kilometers per mile.
@@ -82,8 +108,9 @@ namespace CDSPractical {
         /// </summary>
         /// <param name="km">distance in kilometers</param>
         /// <returns></returns>
-        public double DistanceInMiles(double km) {
-            throw new NotImplementedException();
+        public double DistanceInMiles(double km)
+        {
+            return km / KMPerMile;
         }
 
         /// <summary>
@@ -98,8 +125,9 @@ namespace CDSPractical {
         /// </summary>
         /// <param name="miles">distance in miles</param>
         /// <returns></returns>
-        public double DistanceInKm(double miles) {
-            throw new NotImplementedException();
+        public double DistanceInKm(double miles)
+        {
+            return miles * KMPerMile;
         }
 
         /// <summary>
@@ -120,8 +148,18 @@ namespace CDSPractical {
         /// </summary>
         /// <param name="word">The word to check</param>
         /// <returns></returns>
-        public bool IsPalindrome(string word) {
-            throw new NotImplementedException();
+        public bool IsPalindrome(string word)
+        {
+            string wordToCheck = word.ToLower();
+            int length = word.Length;
+            for (int index = 0; index < length / 2; index++)
+            {
+                if (wordToCheck[index] != wordToCheck[length - 1 - index])
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         /// <summary>
@@ -141,8 +179,29 @@ namespace CDSPractical {
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public IEnumerable<object> Shuffle(IEnumerable<object> source) {
-            throw new NotImplementedException();
+        public IEnumerable<object> Shuffle(IEnumerable<object> source)
+        {
+            int length = source.Count();
+
+            var list = new List<object>(source);
+
+            Random random = new Random(0);
+
+            object tempObject;
+            //skip first no. as there will be swap atleast
+            for (int index = 1; index < length; index++)
+            {
+                int nextRandom = random.Next(0, length - 1);//random index to swap
+                while (nextRandom == index)
+                {//skip to next if replacing same index
+                    nextRandom = random.Next(0, length - 1);
+                }
+                tempObject = list[index];
+                list[index] = list[index - 1];
+                list[index - 1] = tempObject;
+            }
+
+            return list;
         }
 
         /// <summary>
@@ -153,9 +212,28 @@ namespace CDSPractical {
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public int[] Sort(int[] source) {
-            throw new NotImplementedException();
-        }    
+        public int[] Sort(int[] source)
+        {
+            int length = source.Count();
+            int tempSwap = 0;
+
+            //first pass is to settle down heightest number at bottom, n-1 passes
+            for (int passIndex = 1; passIndex < length; passIndex++)
+            {
+                //everytime skip one pass from bottom 
+                for (int index = 0; index < length - passIndex; index++)
+                {
+                    if (source[index] > source[index + 1])
+                    {
+                        tempSwap = source[index];
+                        source[index] = source[index + 1];
+                        source[index + 1] = tempSwap;
+                    }
+                }
+            }
+
+            return source;
+        }
 
         /// <summary>
         /// Each new term in the Fibonacci sequence is generated by adding the 
@@ -167,8 +245,25 @@ namespace CDSPractical {
         /// not exceed four million, find the sum of the even-valued terms.
         /// </summary>
         /// <returns></returns>
-        public int FibonacciSum() {
-            throw new NotImplementedException();
+        public int FibonacciSum()
+        {
+            int previousNumber = 1;
+            int number = 2;
+            int sum = 0;
+            int evenTermSum = 0;
+
+            while (number <= MaxTerm)
+            {
+                sum = previousNumber + number; //fabonacci
+                if (number % 2 == 0)
+                {
+                    evenTermSum += number; //even term sum
+                }
+                //seed next numbers
+                previousNumber = number;
+                number = sum;
+            }
+            return evenTermSum;
         }
 
         /// <summary>
@@ -177,30 +272,40 @@ namespace CDSPractical {
         /// This method is currently broken, fix it so that the tests pass.
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<int> GenerateList() {
+        public IEnumerable<int> GenerateList()
+        {
             var ret = new List<int>();
             var numThreads = 2;
 
             Thread[] threads = new Thread[numThreads];
-            for (var i = 0; i < numThreads; i++) {
-                threads[i] = new Thread(() => {
+            for (var i = 0; i < numThreads; i++)
+            {
+                threads[i] = new Thread(() =>
+                {
                     var complete = false;
-                    while (!complete) {                        
-                        var next = ret.Count + 1;
-                        Thread.Sleep(new Random().Next(1, 10));
-                        if (next <= 100) {
-                            ret.Add(next);
-                        }
+                    while (!complete)
+                    {
+                        lock (ret)//both thread are competing and  updating data
+                        {
+                            var next = ret.Count + 1;
+                            Thread.Sleep(new Random().Next(1, 10));
+                            if (next <= 100)
+                            {
+                                ret.Add(next);
+                            }
 
-                        if (ret.Count >= 100) {
-                            complete = true;
+                            if (ret.Count >= 100)
+                            {
+                                complete = true;
+                            }
                         }
-                    }                    
+                    }
                 });
                 threads[i].Start();
             }
 
-            for (var i = 0; i < numThreads; i++) {
+            for (var i = 0; i < numThreads; i++)
+            {
                 threads[i].Join();
             }
 
