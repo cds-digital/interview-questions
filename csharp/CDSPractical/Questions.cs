@@ -2,15 +2,17 @@
 using System.Collections.Generic;
 using System.Threading;
 
-namespace CDSPractical {
-    public class Questions {
+namespace CDSPractical
+{
+    public class Questions
+    {
         /// <summary>
         /// Given an enumerable of strings, attempt to parse each string and if 
         /// it is an integer, add it to the returned enumerable.
         /// 
         /// For example:
         /// 
-        /// ExtractNumbers(new List<string> { "123", "hello", "234" });
+        ///ExtractNumbers(new List<string> { "123", "hello", "234" });
         /// 
         /// ; would return:
         /// 
@@ -21,8 +23,20 @@ namespace CDSPractical {
         /// </summary>
         /// <param name="source">An enumerable containing words</param>
         /// <returns></returns>
-        public IEnumerable<int> ExtractNumbers(IEnumerable<string> source) {
-            throw new NotImplementedException();
+        public IEnumerable<int> ExtractNumbers(IEnumerable<string> source)
+        {
+            List<int> integerslist = new List<int>();
+            foreach (var ele in source)
+            {
+                int n;
+                bool isNumeric = int.TryParse(ele, out n);
+                if (isNumeric)
+                {
+                    integerslist.Add(n);
+                }
+            }
+            IEnumerable<int> numbers = integerslist;
+            return numbers;
         }
 
         /// <summary>
@@ -66,8 +80,32 @@ namespace CDSPractical {
         /// <param name="first">First list of words</param>
         /// <param name="second">Second list of words</param>
         /// <returns></returns>
-        public string LongestCommonWord(IEnumerable<string> first, IEnumerable<string> second) {
-            throw new NotImplementedException();
+        public string LongestCommonWord(IEnumerable<string> first, IEnumerable<string> second)
+        {
+
+            HashSet<string> map = new HashSet<string>();
+            int max = 0;
+            string maxword = "";
+            foreach (var ele in first)
+            {
+                map.Add(ele);
+
+            }
+
+            foreach (var ele in second)
+            {
+                if (map.Contains(ele))
+                {
+                    int currentlength = ele.Length;
+                    if (max < currentlength)
+                    {
+                        max = currentlength;
+                        maxword = ele;
+                    }
+                }
+            }
+            return maxword;
+
         }
 
         /// <summary>
@@ -82,8 +120,9 @@ namespace CDSPractical {
         /// </summary>
         /// <param name="km">distance in kilometers</param>
         /// <returns></returns>
-        public double DistanceInMiles(double km) {
-            throw new NotImplementedException();
+        public double DistanceInMiles(double km)
+        {
+            return km / 1.6;
         }
 
         /// <summary>
@@ -98,8 +137,10 @@ namespace CDSPractical {
         /// </summary>
         /// <param name="miles">distance in miles</param>
         /// <returns></returns>
-        public double DistanceInKm(double miles) {
-            throw new NotImplementedException();
+        public double DistanceInKm(double miles)
+        {
+            return miles * 1.6;
+
         }
 
         /// <summary>
@@ -120,8 +161,16 @@ namespace CDSPractical {
         /// </summary>
         /// <param name="word">The word to check</param>
         /// <returns></returns>
-        public bool IsPalindrome(string word) {
-            throw new NotImplementedException();
+        public bool IsPalindrome(string word)
+        {
+            for (int i = 0; i < word.Length; i++)
+            {
+                if (word[i] != word[word.Length - 1])
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         /// <summary>
@@ -141,8 +190,17 @@ namespace CDSPractical {
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public IEnumerable<object> Shuffle(IEnumerable<object> source) {
-            throw new NotImplementedException();
+        public IEnumerable<object> Shuffle(IEnumerable<object> source)
+        {
+            List<object> integerslist = new List<object>();
+            foreach (object item in source)
+            {
+                integerslist.Add(item);
+            }
+            integerslist.Reverse();
+            IEnumerable<object> numbers = integerslist;
+            return numbers;
+
         }
 
         /// <summary>
@@ -153,9 +211,20 @@ namespace CDSPractical {
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public int[] Sort(int[] source) {
-            throw new NotImplementedException();
-        }    
+        public int[] Sort(int[] source)
+        {
+            int temp;
+            for (int i = 0; i < source.Length - 1; i++)
+                for (int j = i + 1; j < source.Length; j++)
+                    if (source[i] > source[j])
+                    {
+                        temp = source[i];
+                        source[i] = source[j];
+                        source[j] = temp;
+                    }
+            return source;
+
+        }
 
         /// <summary>
         /// Each new term in the Fibonacci sequence is generated by adding the 
@@ -167,8 +236,22 @@ namespace CDSPractical {
         /// not exceed four million, find the sum of the even-valued terms.
         /// </summary>
         /// <returns></returns>
-        public int FibonacciSum() {
-            throw new NotImplementedException();
+        public int FibonacciSum()
+        {
+            int max = 4000000;
+            int a = 0, b = 1, c = 0;
+            int sum = 0;
+
+            while (c < max)
+            {
+                c = a + b;
+                if (c % 2 == 0) { sum += c; }
+                a = b;
+                b = c;
+            }
+
+            return sum;
+
         }
 
         /// <summary>
@@ -177,34 +260,48 @@ namespace CDSPractical {
         /// This method is currently broken, fix it so that the tests pass.
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<int> GenerateList() {
+        public IEnumerable<int> GenerateList()
+        {
             var ret = new List<int>();
             var numThreads = 2;
 
             Thread[] threads = new Thread[numThreads];
-            for (var i = 0; i < numThreads; i++) {
+            for (var i = 0; i < numThreads; i++)
+            {
                 threads[i] = new Thread(() => {
                     var complete = false;
-                    while (!complete) {                        
-                        var next = ret.Count + 1;
-                        Thread.Sleep(new Random().Next(1, 10));
-                        if (next <= 100) {
-                            ret.Add(next);
-                        }
+                    while (!complete)
+                    {
+                        lock (ret)
+                        {
+                            var next = ret.Count + 1;
+                            Thread.Sleep(new Random().Next(1, 10));
+                            if (next <= 100)
+                            {
+                                ret.Add(next);
+                            }
 
-                        if (ret.Count >= 100) {
-                            complete = true;
+                            if (ret.Count >= 100)
+                            {
+                                complete = true;
+                            }
                         }
-                    }                    
+                    }
                 });
                 threads[i].Start();
             }
 
-            for (var i = 0; i < numThreads; i++) {
+            for (var i = 0; i < numThreads; i++)
+            {
                 threads[i].Join();
             }
 
             return ret;
         }
+
     }
+
 }
+
+
+
