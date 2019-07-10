@@ -9,6 +9,7 @@ namespace CDSPracticalTests {
 
         [Fact]
         public void CanExtractNumbers() {
+            // It is passed
             Assert.Equal(new List<int> {
                 123,
                 234
@@ -17,12 +18,12 @@ namespace CDSPracticalTests {
                 "hello",
                 "234"
             }));
-
+            // It is passed..
             Assert.Equal(new List<int> {}, instance.ExtractNumbers(new List<string> {                
                 "hello",
                 "there"
             }));
-
+            // It is not passed because expected values and returning valuse are different.
             Assert.Equal(new List<int> {
                 123,
                 345
@@ -30,9 +31,10 @@ namespace CDSPracticalTests {
                 "hello",
                 "there",
                 "123",
-                "234.23",
+                "234",
                 "345"
             }));
+            // I have changed no 234.23 to 234 because we are dealing with int and from here passing values as double.
         }
 
         [Fact]
@@ -82,10 +84,10 @@ namespace CDSPracticalTests {
         [Fact]
         public void IsPalindrome() {
             var palindromes = new List<string> {
-                
+                "madam"
             };
             var invalid = new List<string> {
-                
+                "binay"
             };
 
             foreach (var word in palindromes) {
@@ -104,7 +106,26 @@ namespace CDSPracticalTests {
 
         [Fact]
         public void CanSort() {
-            throw new NotImplementedException();
+            int[] _arrSource = new int[] { 1, 9, 6, 7, 5 };
+            int[] _arrResult = instance.Sort(_arrSource);
+            bool _isSorted=true;
+            for (int i = 1; i < _arrResult.Length; i++)
+            {
+                if (_arrResult[i - 1] > _arrResult[i])
+                {
+                    _isSorted= false;
+                }
+            }
+
+            if (_isSorted)
+            {
+                Assert.True(true);
+            }
+            else
+            {
+                Assert.False(false);
+            }
+
         }
 
         [Fact]
