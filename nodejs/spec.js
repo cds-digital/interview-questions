@@ -61,8 +61,8 @@ describe("A set of functions", () => {
 	});
 
 	it("can correctly detect palindromes", () => {
-		let palindromes = [];
-		let invalid = [];
+		let palindromes = ["malayalam", "anna"];
+		let invalid = ["bolton"];
 
 		palindromes.forEach((p) => {
 			expect(instance.isPalindrome(p)).toEqual(true);
@@ -78,6 +78,7 @@ describe("A set of functions", () => {
 		let current = 1;
 		list.forEach((num) => {
 			expect(num).toEqual(current);
+			yield
 			current++;
 		});
 	});

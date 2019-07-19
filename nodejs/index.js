@@ -13,7 +13,11 @@
 /// ]
 ///
 const extractNumbers = (source) => {
-	throw new Error("Not implemented");
+	return source.map((n) => {
+		let res = parseInt(n);
+		if (res != 'NaN')
+			return n;
+	});
 };
 
 /// Given two enumerables of strings, find the longest common word.
@@ -53,7 +57,22 @@ const extractNumbers = (source) => {
 ///
 /// ; would return "wandering" as the longest common word.
 const longestCommonWord = (first, second) => {
-	throw new Error("Not implemented");
+
+	var arr = [];
+
+	for (let i in first) {
+		for (s in second) {
+			if (i == s) {
+				arr.push(i);
+			}
+		}
+	}
+	var maxWord = '';
+	arr.forEach(f =>{
+		maxWord = f.length > maxWord.length ? f : maxWord;
+	});
+
+	return maxWord;
 };
 
 /// Write a method that converts kilometers to miles, given that there are
@@ -65,7 +84,7 @@ const longestCommonWord = (first, second) => {
 ///
 /// ; would return 10;
 const distanceInMiles = (kilometers) => {
-	throw new Error("Not implemented");
+	return kilometers / 1.6;
 };
 
 /// Write a method that converts miles to kilometers, give that there are
@@ -77,7 +96,7 @@ const distanceInMiles = (kilometers) => {
 ///
 /// ; would return 16;
 const distanceInKm = (miles) => {
-	throw new Error("Not implemented");
+	return miles * 1.6;
 };
 
 /// Write a method that returns true if the word is a palindrome, false if
@@ -95,7 +114,13 @@ const distanceInKm = (miles) => {
 ///
 /// Also complete the related test case for this method.
 const isPalindrome = (word) => {
-	throw new Error("Not implemented");
+	var newString = word;
+
+	for (var i = word.length - 1; i >= 0; i--) {
+		newString += word[i];
+	}
+
+	return newString == word;
 };
 
 /// Generate a list of integers from 1 to 100.
@@ -104,9 +129,9 @@ const isPalindrome = (word) => {
 /// removing the function call that inserts the number.
 const generateList = () => {
 	var list = new Array();
-	var funcs  = new Array();
+	var funcs = new Array();
 	for (var i = 1; i <= 100; i++) {
-		funcs.push(function(){
+		funcs.push(function () {
 			list.push(i);
 		});
 	};
@@ -115,10 +140,10 @@ const generateList = () => {
 };
 
 module.exports = {
-	extractNumbers 		: extractNumbers,
-	longestCommonWord 	: longestCommonWord,
-	distanceInMiles 	: distanceInMiles,
-	distanceInKm 		: distanceInKm,
-	isPalindrome 		: isPalindrome,
-	generateList 		: generateList
+	extractNumbers: extractNumbers,
+	longestCommonWord: longestCommonWord,
+	distanceInMiles: distanceInMiles,
+	distanceInKm: distanceInKm,
+	isPalindrome: isPalindrome,
+	generateList: generateList
 };

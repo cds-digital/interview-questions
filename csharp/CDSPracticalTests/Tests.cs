@@ -82,10 +82,13 @@ namespace CDSPracticalTests {
         [Fact]
         public void IsPalindrome() {
             var palindromes = new List<string> {
-                
+                "malayalam",
+                "kivik"
             };
             var invalid = new List<string> {
-                
+                null,
+                string.Empty,
+                "new"
             };
 
             foreach (var word in palindromes) {
@@ -104,7 +107,7 @@ namespace CDSPracticalTests {
 
         [Fact]
         public void CanSort() {
-            throw new NotImplementedException();
+            Assert.Equal(new[] { 1, 2, 3 }, instance.Sort(new[] { 3, 1, 2 }));
         }
 
         [Fact]
