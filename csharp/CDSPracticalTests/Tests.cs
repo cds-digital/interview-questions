@@ -108,7 +108,7 @@ namespace CDSPracticalTests {
             
             //assert
             Assert.Equal(new int[] { 1, 2, 3, 4 }, instance.Sort(new int[] { 1, 3, 4, 2 }));
-            Assert.NotEqual(new int[] { 8, 6, 3, 5 }, instance.Sort(new int[] { 1, 3, 4, 2 }));
+            Assert.NotEqual(new int[] { 1, 4, 3, 2 }, instance.Sort(new int[] { 1, 3, 4, 2 }));
         }
 
         [Fact]

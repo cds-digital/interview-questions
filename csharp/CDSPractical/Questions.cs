@@ -150,9 +150,25 @@ namespace CDSPractical
         /// <returns></returns>
         public bool IsPalindrome(string word)
         {
-            return Enumerable
-                .SequenceEqual(word.ToLower().ToCharArray(), word.ToLower().ToCharArray()
-                .Reverse());
+
+            int i = 0;
+            int j = word.Length - 1;
+            while (true)
+            {
+                if (i > j)
+                {
+                    return true;
+                }
+                char a = word[i];
+                char b = word[j];
+                if (char.ToLower(a) != char.ToLower(b))
+                {
+                    return false;
+                }
+                i++;
+                j--;
+            }
+            
         }
 
         /// <summary>
@@ -174,14 +190,15 @@ namespace CDSPractical
         /// <returns></returns>
         public IEnumerable<object> Shuffle(IEnumerable<object> source)
         {
-            Random random = new Random();
-            var shuffled = source
-                  .Select(i => new { key = random.Next(), i })
-                  .OrderBy(tmp => tmp.key)
-                  .Select(tmp => tmp.i)
-                  .ToList();
+            IEnumerable<object> target = ExtendedMethods.ShuffleExt(source);
 
-            return shuffled;
+            while (Enumerable.SequenceEqual(source, target))
+            {
+                target = ExtendedMethods.ShuffleExt(source);
+            }
+
+            return target;
+
         }
 
         /// <summary>
@@ -237,7 +254,7 @@ namespace CDSPractical
         /// <returns></returns>
         public IEnumerable<int> GenerateList()
         {
-            object _locker = 0;
+            //object _locker = 0;
             var ret = new List<int>();
             var numThreads = 2;
             Thread[] threads = new Thread[numThreads];
@@ -248,7 +265,7 @@ namespace CDSPractical
                     var complete = false;
                     while (!complete)
                     {
-                        lock (_locker)
+                        lock (ret)
                         {
 
                             var next = ret.Count + 1;
