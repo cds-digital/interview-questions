@@ -117,6 +117,7 @@ namespace CDSPracticalTests
         public void CanSort()
         {
             Assert.Equal(new[] { 1, 2, 3, 4, 5 }, instance.Sort(new[] { 4, 1, 3, 5, 2 }));
+            Assert.NotEqual(new int[] { 1, 4, 3, 2, 5 }, instance.Sort(new int[] { 1, 3, 5, 4, 2 }));
         }
 
         [Fact]
