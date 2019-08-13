@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 namespace CDSPractical {
@@ -22,7 +23,22 @@ namespace CDSPractical {
         /// <param name="source">An enumerable containing words</param>
         /// <returns></returns>
         public IEnumerable<int> ExtractNumbers(IEnumerable<string> source) {
-            throw new NotImplementedException();
+
+            var numbers = new List<int>();
+
+            foreach (var item in source)
+            {
+                int result;
+
+                if (int.TryParse(item, out result))
+                {
+                    numbers.Add(result);
+                }
+
+            }
+
+            return numbers;
+
         }
 
         /// <summary>
@@ -67,7 +83,10 @@ namespace CDSPractical {
         /// <param name="second">Second list of words</param>
         /// <returns></returns>
         public string LongestCommonWord(IEnumerable<string> first, IEnumerable<string> second) {
-            throw new NotImplementedException();
+            return first
+                    .Intersect(second)
+                    .OrderByDescending(w => w.Length)
+                    .FirstOrDefault();
         }
 
         /// <summary>
@@ -83,7 +102,9 @@ namespace CDSPractical {
         /// <param name="km">distance in kilometers</param>
         /// <returns></returns>
         public double DistanceInMiles(double km) {
-            throw new NotImplementedException();
+            const double KilometersPerMile = 1.6;
+
+            return km / KilometersPerMile;
         }
 
         /// <summary>
@@ -99,7 +120,9 @@ namespace CDSPractical {
         /// <param name="miles">distance in miles</param>
         /// <returns></returns>
         public double DistanceInKm(double miles) {
-            throw new NotImplementedException();
+            const double KilometersPerMile = 1.6;
+
+            return miles * KilometersPerMile;
         }
 
         /// <summary>
@@ -121,7 +144,17 @@ namespace CDSPractical {
         /// <param name="word">The word to check</param>
         /// <returns></returns>
         public bool IsPalindrome(string word) {
-            throw new NotImplementedException();
+            var lowerCaseWord = word.ToLower();
+            int i = 0;
+            int j = lowerCaseWord.Length - 1;
+
+            while ((i <= j) && (lowerCaseWord[i] == lowerCaseWord[j]))
+            {
+                i++;
+                j--;
+            }
+
+            return i >= j;
         }
 
         /// <summary>
@@ -142,7 +175,23 @@ namespace CDSPractical {
         /// <param name="source"></param>
         /// <returns></returns>
         public IEnumerable<object> Shuffle(IEnumerable<object> source) {
-            throw new NotImplementedException();
+            var shuffledList = new List<object>();
+            var indexGenerator = new Random();
+            var haveBeenAdded = new bool[source.Count()];
+            
+            while (shuffledList.Count < source.Count())
+            {
+                int index = indexGenerator.Next(0, source.Count());
+
+                // Check if item hasn't been added yet and if it has a new position in the shuffled list.
+                if (!haveBeenAdded[index] && index != shuffledList.Count)
+                {
+                    haveBeenAdded[index] = true;
+                    shuffledList.Add(source.ElementAt(index));
+                }
+            }
+
+            return shuffledList;
         }
 
         /// <summary>
@@ -154,7 +203,30 @@ namespace CDSPractical {
         /// <param name="source"></param>
         /// <returns></returns>
         public int[] Sort(int[] source) {
-            throw new NotImplementedException();
+            bool sw = true;
+
+            // Bubble sort algorithm.
+            while (sw)
+            {
+                sw = false;
+                int index = 0;
+
+                while (index < source.Length - 1)
+                {
+                    if (source[index] > source[index + 1])
+                    {
+                        var aux             = source[index];
+                        source[index]       = source[index + 1];
+                        source[index + 1]   = aux;
+                        sw                  = true;
+                    }
+
+                    index++;
+                }
+
+            }
+
+            return source;
         }    
 
         /// <summary>
@@ -168,7 +240,22 @@ namespace CDSPractical {
         /// </summary>
         /// <returns></returns>
         public int FibonacciSum() {
-            throw new NotImplementedException();
+            const int MaximumValue = 4000000;
+            var sum = 0;
+            var first = 1;
+            var second = 2;
+
+            while (second < MaximumValue)
+            {
+                sum += second % 2 == 0 ? second : 0;
+
+                var aux = second;
+                second += first;
+                first = aux;
+            }
+
+            return sum;
+
         }
 
         /// <summary>
@@ -185,15 +272,20 @@ namespace CDSPractical {
             for (var i = 0; i < numThreads; i++) {
                 threads[i] = new Thread(() => {
                     var complete = false;
-                    while (!complete) {                        
-                        var next = ret.Count + 1;
-                        Thread.Sleep(new Random().Next(1, 10));
-                        if (next <= 100) {
-                            ret.Add(next);
-                        }
+                    while (!complete) {
+                        lock (ret)
+                        {
+                            var next = ret.Count + 1;
+                            Thread.Sleep(new Random().Next(1, 10));
+                            if (next <= 100)
+                            {
+                                ret.Add(next);
+                            }
 
-                        if (ret.Count >= 100) {
-                            complete = true;
+                            if (ret.Count >= 100)
+                            {
+                                complete = true;
+                            }
                         }
                     }                    
                 });
