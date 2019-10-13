@@ -82,10 +82,13 @@ namespace CDSPracticalTests {
         [Fact]
         public void IsPalindrome() {
             var palindromes = new List<string> {
-                
+                "anna",
+                "Anna",
+
             };
             var invalid = new List<string> {
-                
+                "if it contains whitespaces it's not a word, it's a sentence",
+                "notAPalindrome"
             };
 
             foreach (var word in palindromes) {
@@ -104,7 +107,17 @@ namespace CDSPracticalTests {
 
         [Fact]
         public void CanSort() {
-            throw new NotImplementedException();
+            var numbers = new int[10];
+            for (int i = 0; i < 10; i++)
+                numbers[i] = new Random().Next();
+
+            var sortedNumbers = numbers;
+            Array.Sort(sortedNumbers);
+
+            var returnedSortedNumbers = instance.Sort(numbers);
+
+            for (int i = 0; i < numbers.Length; i++)
+                Assert.Equal(returnedSortedNumbers[i], sortedNumbers[i]);
         }
 
         [Fact]
