@@ -82,10 +82,10 @@ namespace CDSPracticalTests {
         [Fact]
         public void IsPalindrome() {
             var palindromes = new List<string> {
-                
+                "mum", "refer", "dad"
             };
             var invalid = new List<string> {
-                
+                "this", "list", "is", "invalid"
             };
 
             foreach (var word in palindromes) {
@@ -99,12 +99,12 @@ namespace CDSPracticalTests {
 
         [Fact]
         public void CanShuffle() {
-            Assert.Equal(new List<string> { "two", "one" }, instance.Shuffle(new List<string> { "one", "two" }));
+            Assert.Equal(new List<string> { "one", "two" }, instance.Shuffle(new List<string> { "two", "one" }));
         }
 
         [Fact]
         public void CanSort() {
-            throw new NotImplementedException();
+            Assert.Equal(instance.Sort(new int[] { 4, 7, 11 }), instance.Sort(new int[] { 11, 4, 7 }));
         }
 
         [Fact]
