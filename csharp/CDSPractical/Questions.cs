@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 namespace CDSPractical {
@@ -22,7 +23,19 @@ namespace CDSPractical {
         /// <param name="source">An enumerable containing words</param>
         /// <returns></returns>
         public IEnumerable<int> ExtractNumbers(IEnumerable<string> source) {
-            throw new NotImplementedException();
+            var result = new List<int>();
+
+            foreach (var sourceString in source)
+            {
+                int parsed;
+
+                if (int.TryParse(sourceString, out parsed))
+                {
+                    result.Add(parsed);
+                }
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -67,7 +80,20 @@ namespace CDSPractical {
         /// <param name="second">Second list of words</param>
         /// <returns></returns>
         public string LongestCommonWord(IEnumerable<string> first, IEnumerable<string> second) {
-            throw new NotImplementedException();
+            var firstProcessed = first.Select((string s, int i) => new KeyValuePair<int, int>(i, s.Length))
+                                      .OrderByDescending(k => k.Value);
+
+            foreach (var firstProcessedItem in firstProcessed)
+            {
+                var item = first.ElementAt(firstProcessedItem.Key);
+
+                if (second.Contains(item))
+                {
+                    return item;
+                }
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -83,7 +109,7 @@ namespace CDSPractical {
         /// <param name="km">distance in kilometers</param>
         /// <returns></returns>
         public double DistanceInMiles(double km) {
-            throw new NotImplementedException();
+            return km / 1.6;
         }
 
         /// <summary>
@@ -99,7 +125,7 @@ namespace CDSPractical {
         /// <param name="miles">distance in miles</param>
         /// <returns></returns>
         public double DistanceInKm(double miles) {
-            throw new NotImplementedException();
+            return miles * 1.6;
         }
 
         /// <summary>
@@ -121,7 +147,15 @@ namespace CDSPractical {
         /// <param name="word">The word to check</param>
         /// <returns></returns>
         public bool IsPalindrome(string word) {
-            throw new NotImplementedException();
+            for (int i = 0; i < word.Length / 2; i++)
+            {
+                if (word[i] != word[word.Length - i - 1])
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -142,7 +176,18 @@ namespace CDSPractical {
         /// <param name="source"></param>
         /// <returns></returns>
         public IEnumerable<object> Shuffle(IEnumerable<object> source) {
-            throw new NotImplementedException();
+            var result = new List<object>(source);
+            for (int i = 0; i < result.Count; i++)
+            {
+                if (i + 1 < result.Count)
+                {
+                    var aux = result[i + 1];
+                    result[i + 1] = result[i];
+                    result[i] = aux;
+                }
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -154,7 +199,23 @@ namespace CDSPractical {
         /// <param name="source"></param>
         /// <returns></returns>
         public int[] Sort(int[] source) {
-            throw new NotImplementedException();
+            int[] result = new int[source.Length];
+            Array.Copy(source, 0, result, 0, source.Length);
+
+            for (int i = 0; i < result.Length - 1; i++)
+            {
+                for (int j = 0; j < result.Length - i - 1; j++)
+                {
+                    if (result[j] > result[j + 1])
+                    {
+                        int aux = result[j + 1];
+                        result[j + 1] = result[j];
+                        result[j] = aux;
+                    }
+                }
+            }
+
+            return result;
         }    
 
         /// <summary>
@@ -168,7 +229,30 @@ namespace CDSPractical {
         /// </summary>
         /// <returns></returns>
         public int FibonacciSum() {
-            throw new NotImplementedException();
+            var prev1 = 1;
+            var prev2 = 2;
+
+            var total = 2;
+
+            while (true)
+            {
+                var fibo = prev1 + prev2;
+
+                if (fibo >= 4000000)
+                {
+                    break;
+                }
+
+                if (fibo % 2 == 0)
+                {
+                    total += fibo;
+                }
+
+                prev1 = prev2;
+                prev2 = fibo;
+            }
+
+            return total;
         }
 
         /// <summary>
@@ -181,20 +265,27 @@ namespace CDSPractical {
             var ret = new List<int>();
             var numThreads = 2;
 
+            var syncObject = new object();
+
             Thread[] threads = new Thread[numThreads];
             for (var i = 0; i < numThreads; i++) {
                 threads[i] = new Thread(() => {
                     var complete = false;
-                    while (!complete) {                        
-                        var next = ret.Count + 1;
-                        Thread.Sleep(new Random().Next(1, 10));
-                        if (next <= 100) {
-                            ret.Add(next);
-                        }
+                    while (!complete) {
+                        lock (syncObject)
+                        {
+                            var next = ret.Count + 1;
+                            Thread.Sleep(new Random().Next(1, 10));
+                            if (next <= 100)
+                            {
+                                ret.Add(next);
+                            }
 
-                        if (ret.Count >= 100) {
-                            complete = true;
-                        }
+                            if (ret.Count >= 100)
+                            {
+                                complete = true;
+                            }
+                        }                        
                     }                    
                 });
                 threads[i].Start();
