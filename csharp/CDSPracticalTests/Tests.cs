@@ -1,14 +1,16 @@
 using CDSPractical;
-using System;
 using System.Collections.Generic;
 using Xunit;
 
-namespace CDSPracticalTests {
-    public class Tests {
-        Questions instance = new Questions();
+namespace CDSPracticalTests
+{
+    public class Tests
+    {
+        private readonly Questions instance = new Questions();
 
         [Fact]
-        public void CanExtractNumbers() {
+        public void CanExtractNumbers1()
+        {
             Assert.Equal(new List<int> {
                 123,
                 234
@@ -17,12 +19,20 @@ namespace CDSPracticalTests {
                 "hello",
                 "234"
             }));
+        }
 
-            Assert.Equal(new List<int> {}, instance.ExtractNumbers(new List<string> {                
+        [Fact]
+        public void CanExtractNumbers2()
+        {
+            Assert.Equal(new List<int> { }, instance.ExtractNumbers(new List<string> {
                 "hello",
                 "there"
             }));
 
+        }
+        [Fact]
+        public void CanExtractNumbers3()
+        {
             Assert.Equal(new List<int> {
                 123,
                 345
@@ -36,7 +46,8 @@ namespace CDSPracticalTests {
         }
 
         [Fact]
-        public void CanGetLongestCommonWord() {
+        public void CanGetLongestCommonWord()
+        {
             Assert.Equal("wandering", instance.LongestCommonWord(
                 new List<string> {
                     "love",
@@ -70,54 +81,63 @@ namespace CDSPracticalTests {
         }
 
         [Fact]
-        public void CanGetDistanceInMiles() {
+        public void CanGetDistanceInMiles()
+        {
             Assert.Equal(10.00, instance.DistanceInMiles(16.00));
         }
 
         [Fact]
-        public void CanGetDistanceInKilometers() {
+        public void CanGetDistanceInKilometers()
+        {
             Assert.Equal(16.00, instance.DistanceInKm(10.00));
         }
 
-        [Fact]
-        public void IsPalindrome() {
-            var palindromes = new List<string> {
-                
-            };
-            var invalid = new List<string> {
-                
-            };
+        /// <summary>
+        /// Split the True and False assetts into separate unit tests.
+        /// </summary>
+        /// <param name="word"></param>
+        [Theory]
+        [InlineData("Anna")]
+        [InlineData("radar")]
+        public void WordIsPalindrome(string word)
+        {
+            Assert.True(instance.IsPalindrome(word));
+        }
 
-            foreach (var word in palindromes) {
-                Assert.True(instance.IsPalindrome(word));
-            }
-
-            foreach (var word in invalid) {
-                Assert.False(instance.IsPalindrome(word));
-            }
+        [Theory]
+        [InlineData("bolton")]
+        [InlineData("qwertyuiop")]
+        public void WordIsNotPalindrome(string word)
+        {
+            Assert.False(instance.IsPalindrome(word));
         }
 
         [Fact]
-        public void CanShuffle() {
+        public void CanShuffle()
+        {
             Assert.Equal(new List<string> { "two", "one" }, instance.Shuffle(new List<string> { "one", "two" }));
         }
 
         [Fact]
-        public void CanSort() {
-            throw new NotImplementedException();
+        public void CanSort()
+        {
+            Assert.Equal(new[] { 1, 2, 3, 4, 5 }, instance.Sort(new[] { 5, 3, 4, 1, 2 }));
         }
 
         [Fact]
-        public void CanSumFibonacciNumbers() {
+        public void CanSumFibonacciNumbers()
+        {
             Assert.Equal(4613732, instance.FibonacciSum());
         }
 
         [Fact]
-        public void CanGenerateListOfNumbers() {
+        public void CanGenerateListOfNumbers()
+        {
             var list = instance.GenerateList();
 
             var current = 1;
-            foreach (var num in list) {
+            foreach (var num in list)
+            {
                 Assert.Equal(current, num);
                 current++;
             }
