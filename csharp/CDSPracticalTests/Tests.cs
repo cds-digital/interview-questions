@@ -1,6 +1,7 @@
 using CDSPractical;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace CDSPracticalTests {
@@ -82,10 +83,20 @@ namespace CDSPracticalTests {
         [Fact]
         public void IsPalindrome() {
             var palindromes = new List<string> {
-                
+                "madam",
+                "racecar",
+                "aaaaaaaaaaAA",
+                "Bob",
+                "Hannah",
+                "Stats"
             };
             var invalid = new List<string> {
-                
+                "meow",
+                "grrrrr",
+                "palindrome",
+                "sleepy",
+                "anagram",
+                "nagaram"
             };
 
             foreach (var word in palindromes) {
@@ -104,7 +115,10 @@ namespace CDSPracticalTests {
 
         [Fact]
         public void CanSort() {
-            throw new NotImplementedException();
+            var input = new[] { 9, 8, 7, 6, 5, 3, 4, 1, 2 };
+            var sortedInput = input.OrderBy(_ => _).ToArray();
+
+            Assert.Equal(sortedInput, instance.Sort(input));
         }
 
         [Fact]
