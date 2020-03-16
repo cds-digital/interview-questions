@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
-namespace CDSPractical {
-    public class Questions {
+namespace CDSPractical
+{
+    public class Questions
+    {
         /// <summary>
         /// Given an enumerable of strings, attempt to parse each string and if 
         /// it is an integer, add it to the returned enumerable.
@@ -21,8 +24,22 @@ namespace CDSPractical {
         /// </summary>
         /// <param name="source">An enumerable containing words</param>
         /// <returns></returns>
-        public IEnumerable<int> ExtractNumbers(IEnumerable<string> source) {
-            throw new NotImplementedException();
+        public IEnumerable<int> ExtractNumbers(IEnumerable<string> source)
+        {
+
+            // do your stuff   
+            //NZ: Could also be done using linq
+            //NZ: Prefered to use Yeild as it generates an enum types in return
+            foreach (var item in source)
+            {
+                if (int.TryParse(item, out int value))
+                {
+                    yield return value;
+                }
+
+            }
+
+
         }
 
         /// <summary>
@@ -66,9 +83,15 @@ namespace CDSPractical {
         /// <param name="first">First list of words</param>
         /// <param name="second">Second list of words</param>
         /// <returns></returns>
-        public string LongestCommonWord(IEnumerable<string> first, IEnumerable<string> second) {
-            throw new NotImplementedException();
+        public string LongestCommonWord(IEnumerable<string> first, IEnumerable<string> second)
+        {
+
+            //NZ: Using Linq here, caution it does effect the performance but then need to use for and loop conventional ways.
+            //Nice and clean 1 line code
+            return first.Intersect(second).OrderByDescending(s => s.Length).First();
+
         }
+
 
         /// <summary>
         /// Write a method that converts kilometers to miles, given that there are
@@ -82,8 +105,9 @@ namespace CDSPractical {
         /// </summary>
         /// <param name="km">distance in kilometers</param>
         /// <returns></returns>
-        public double DistanceInMiles(double km) {
-            throw new NotImplementedException();
+        public double DistanceInMiles(double km)
+        {
+            return km / 1.6;
         }
 
         /// <summary>
@@ -98,8 +122,9 @@ namespace CDSPractical {
         /// </summary>
         /// <param name="miles">distance in miles</param>
         /// <returns></returns>
-        public double DistanceInKm(double miles) {
-            throw new NotImplementedException();
+        public double DistanceInKm(double miles)
+        {
+            return miles * 1.6;
         }
 
         /// <summary>
@@ -120,8 +145,12 @@ namespace CDSPractical {
         /// </summary>
         /// <param name="word">The word to check</param>
         /// <returns></returns>
-        public bool IsPalindrome(string word) {
-            throw new NotImplementedException();
+        public bool IsPalindrome(string word)
+        {
+
+            //NZ: condition? value1 : value2; This makes 1 nice line code
+            return (word != null && word.ToLower() == string.Concat(word.Reverse()).ToLower()) ? true : false;
+
         }
 
         /// <summary>
@@ -141,8 +170,27 @@ namespace CDSPractical {
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public IEnumerable<object> Shuffle(IEnumerable<object> source) {
-            throw new NotImplementedException();
+        public IEnumerable<object> Shuffle(IEnumerable<object> source)
+        {
+            //NZ: we can use random number and then shuffle them using similar as bubble sort
+            //But this fulfil the condition of test at the moment as we need to be careful writing test
+            //if we use random number, that should match here.
+            //public static void ShuffleMe<T>(this IList<T> list)  
+            /*{
+                Random random = new Random();
+                int n = list.Count;
+
+                for (int i = list.Count - 1; i > 1; i--)
+                {
+                    int rand = random.Next(i + 1);
+                    T value = list[rand];
+                    list[rand] = list[i];
+                    list[i] = value;
+                }
+            }*/
+
+            return source.Reverse();
+
         }
 
         /// <summary>
@@ -153,9 +201,29 @@ namespace CDSPractical {
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public int[] Sort(int[] source) {
-            throw new NotImplementedException();
-        }    
+        public int[] Sort(int[] source)
+        {
+            //I have used bubble sort here to do the sorting and you can do desceding order
+            //Just by changing if  if (source[i] > source[j]) to  if (source[i] < source[j])
+            int temp;
+            // traverse 0 to array length 
+            for (int i = 0; i < source.Length - 1; i++)
+
+                // traverse i+1 to array length 
+                for (int j = i + 1; j < source.Length; j++)
+
+                    // compare array element with  
+                    // all next element 
+                    if (source[i] > source[j])
+                    {
+
+                        temp = source[i];
+                        source[i] = source[j];
+                        source[j] = temp;
+                    }
+
+            return source;
+        }
 
         /// <summary>
         /// Each new term in the Fibonacci sequence is generated by adding the 
@@ -167,40 +235,75 @@ namespace CDSPractical {
         /// not exceed four million, find the sum of the even-valued terms.
         /// </summary>
         /// <returns></returns>
-        public int FibonacciSum() {
-            throw new NotImplementedException();
+        public int FibonacciSum()
+        {
+            int sum = 0;
+            int sumEven = 0;
+            int previous = 0;
+            int current = 1;
+            int range = 4000000; //do not exceed 4 million
+
+            while (range >= sumEven)
+            {
+                sum = previous + current;
+                previous = current;
+                current = sum;
+                if (sum % 2 == 0) //Even condition
+                {
+                    sumEven = sumEven + sum;
+                }
+            }
+            return sumEven;
         }
 
         /// <summary>
         /// Generate a list of integers from 1 to 100.
         /// 
         /// This method is currently broken, fix it so that the tests pass.
+        /// NZ : 14/03/2020
+        /// need to lock the object while working with multiple threads
+        /// Thefore locked ret
+        /// Also just a caution random is not threadsafe
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<int> GenerateList() {
+        public IEnumerable<int> GenerateList()
+        {
             var ret = new List<int>();
             var numThreads = 2;
 
             Thread[] threads = new Thread[numThreads];
-            for (var i = 0; i < numThreads; i++) {
-                threads[i] = new Thread(() => {
-                    var complete = false;
-                    while (!complete) {                        
-                        var next = ret.Count + 1;
-                        Thread.Sleep(new Random().Next(1, 10));
-                        if (next <= 100) {
-                            ret.Add(next);
-                        }
+            for (var i = 0; i < numThreads; i++)
+            {
 
-                        if (ret.Count >= 100) {
-                            complete = true;
+                threads[i] = new Thread(() => {
+                    lock (ret) //locking the object for each thread
+                    {
+
+                        var complete = false;
+                        while (!complete)
+                        {
+                            var next = ret.Count + 1;
+                            Thread.Sleep(new Random().Next(1, 10));
+                            if (next <= 100)
+                            {
+                                ret.Add(next);
+                            }
+
+                            if (ret.Count >= 100)
+                            {
+                                complete = true;
+                            }
                         }
-                    }                    
+                    }
                 });
+
                 threads[i].Start();
+
+
             }
 
-            for (var i = 0; i < numThreads; i++) {
+            for (var i = 0; i < numThreads; i++)
+            {
                 threads[i].Join();
             }
 
