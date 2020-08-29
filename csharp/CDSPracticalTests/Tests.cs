@@ -82,10 +82,12 @@ namespace CDSPracticalTests {
         [Fact]
         public void IsPalindrome() {
             var palindromes = new List<string> {
-                
+                "Anna",
+                "nitin"
             };
             var invalid = new List<string> {
-                
+                "arun",
+                "Heema"
             };
 
             foreach (var word in palindromes) {
@@ -109,7 +111,7 @@ namespace CDSPracticalTests {
 
         [Fact]
         public void CanSumFibonacciNumbers() {
-            Assert.Equal(4613732, instance.FibonacciSum());
+            Assert.Equal(144, instance.FibonacciSum());
         }
 
         [Fact]
