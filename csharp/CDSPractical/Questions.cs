@@ -198,7 +198,7 @@ namespace CDSPractical {
             {
                 for (j = i + 1; j < count; j++)
                 {
-                    if (source[i] < source[j])
+                    if (source[i] > source[j])
                     {
                         tmp = source[i];
                         source[i] = source[j];

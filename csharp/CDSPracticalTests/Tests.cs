@@ -1,6 +1,7 @@
 using CDSPractical;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace CDSPracticalTests {
@@ -106,7 +107,9 @@ namespace CDSPracticalTests {
 
         [Fact]
         public void CanSort() {
-            throw new NotImplementedException();
+            int[] arr = { 2, 3, 1, 5, 6, 8 };
+            var shortedArr = instance.Sort(arr);
+            Assert.True(shortedArr.SequenceEqual(arr.OrderBy(m=>m)));
         }
 
         [Fact]
