@@ -109,7 +109,15 @@ namespace CDSPracticalTests {
         public void CanSort() {
             int[] arr = { 2, 3, 1, 5, 6, 8 };
             var shortedArr = instance.Sort(arr);
-            Assert.True(shortedArr.SequenceEqual(arr.OrderBy(m=>m)));
+            Assert.True(shortedArr.SequenceEqual(arr.OrderBy(m => m)));
+            
+            int[] arr1 = { 12, 43, 11, 25, 9, 10 };
+            var shortedArr1 = instance.Sort(arr1);
+            Assert.True(shortedArr1.SequenceEqual(arr1.OrderBy(m => m)));
+            
+            int[] arr2 = { 24, 31, 12, 54, 66, 89 };
+            var shortedArr2 = instance.Sort(arr2);
+            Assert.True(shortedArr2.SequenceEqual(arr2.OrderBy(m => m)));
         }
 
         [Fact]
