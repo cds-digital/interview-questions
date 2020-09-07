@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 namespace CDSPractical {
@@ -22,7 +23,22 @@ namespace CDSPractical {
         /// <param name="source">An enumerable containing words</param>
         /// <returns></returns>
         public IEnumerable<int> ExtractNumbers(IEnumerable<string> source) {
-            throw new NotImplementedException();
+            List<string> list = source.ToList();           
+            List<int> result=new List<int>();
+            foreach (string str in list)
+            {
+                try
+                {
+                    int x = Int32.Parse(str);
+                    result.Add(x);
+                }
+                catch (FormatException)
+                {
+                }
+                
+            }
+            return result;
+            // throw new NotImplementedException();
         }
 
         /// <summary>
@@ -67,7 +83,31 @@ namespace CDSPractical {
         /// <param name="second">Second list of words</param>
         /// <returns></returns>
         public string LongestCommonWord(IEnumerable<string> first, IEnumerable<string> second) {
-            throw new NotImplementedException();
+            List<string> result = new List<string>();
+
+            foreach (string str in first)
+            {
+                foreach (string str2 in second)
+                {
+                    if (str.Equals(str2))
+                    {
+                        result.Add(str);
+                        break;
+                    }
+                }
+            }
+            int maxlength = 0;
+            string output=string.Empty;
+            foreach (string str in result)
+            {
+                if (str.Length > maxlength)
+                {
+                    maxlength = str.Length;
+                    output = str;
+                }
+            }
+            return output;
+            //throw new NotImplementedException();
         }
 
         /// <summary>
@@ -83,7 +123,10 @@ namespace CDSPractical {
         /// <param name="km">distance in kilometers</param>
         /// <returns></returns>
         public double DistanceInMiles(double km) {
-            throw new NotImplementedException();
+
+            double miles = km * (1 / 1.6);
+            return miles;
+            //throw new NotImplementedException();
         }
 
         /// <summary>
@@ -99,7 +142,9 @@ namespace CDSPractical {
         /// <param name="miles">distance in miles</param>
         /// <returns></returns>
         public double DistanceInKm(double miles) {
-            throw new NotImplementedException();
+            double km = miles * (1.6);
+            return km;
+            //throw new NotImplementedException();
         }
 
         /// <summary>
@@ -121,7 +166,26 @@ namespace CDSPractical {
         /// <param name="word">The word to check</param>
         /// <returns></returns>
         public bool IsPalindrome(string word) {
-            throw new NotImplementedException();
+           string reverseword = string.Empty;
+            if (word != null)
+            {
+                for (int i = word.Length - 1; i >= 0; i--)
+                {
+                    reverseword += word[i].ToString();
+                }
+                if (reverseword == word)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+                return true;
+
+           // throw new NotImplementedException();
         }
 
         /// <summary>
@@ -142,7 +206,9 @@ namespace CDSPractical {
         /// <param name="source"></param>
         /// <returns></returns>
         public IEnumerable<object> Shuffle(IEnumerable<object> source) {
-            throw new NotImplementedException();
+            var rand = new Random();
+            var randomList = source.OrderBy(x => rand.Next()).ToList();
+            return randomList;
         }
 
         /// <summary>
@@ -154,7 +220,22 @@ namespace CDSPractical {
         /// <param name="source"></param>
         /// <returns></returns>
         public int[] Sort(int[] source) {
-            throw new NotImplementedException();
+            int temp;
+            for (int i = 0; i < source.Length - 1; i++)
+            {
+                for (int j = i + 1; j < source.Length; j++)
+                {
+                    if (source[i] < source[j])
+                    {
+                        temp = source[i];
+                        source[i] = source[j];
+                        source[j] = temp;
+                    }
+                }
+            }
+            Array.Reverse(source);
+            return source;
+            //throw new NotImplementedException();
         }    
 
         /// <summary>
@@ -168,7 +249,17 @@ namespace CDSPractical {
         /// </summary>
         /// <returns></returns>
         public int FibonacciSum() {
-            throw new NotImplementedException();
+            int i = 1, j = 1, sum = 0;
+            while (i < 4000000)
+            {
+                i = i + j;
+                j = i - j;
+                if (i % 2 == 0)
+                    sum += i;
+            }
+            return sum;
+
+            //throw new NotImplementedException();
         }
 
         /// <summary>
@@ -179,7 +270,7 @@ namespace CDSPractical {
         /// <returns></returns>
         public IEnumerable<int> GenerateList() {
             var ret = new List<int>();
-            var numThreads = 2;
+            var numThreads = 1;
 
             Thread[] threads = new Thread[numThreads];
             for (var i = 0; i < numThreads; i++) {
