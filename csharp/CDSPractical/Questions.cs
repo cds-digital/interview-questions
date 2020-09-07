@@ -5,6 +5,7 @@ using System.Threading;
 
 namespace CDSPractical {
     public class Questions {
+        double mileVariable = 1.6;
         /// <summary>
         /// Given an enumerable of strings, attempt to parse each string and if 
         /// it is an integer, add it to the returned enumerable.
@@ -92,7 +93,7 @@ namespace CDSPractical {
         /// <returns></returns>
         public double DistanceInMiles(double km) {
 
-            return km / 1.6;
+            return km / mileVariable;
         }
 
         /// <summary>
@@ -110,7 +111,7 @@ namespace CDSPractical {
         public double DistanceInKm(double miles) {
           
 
-            return miles * 1.6;
+            return miles * mileVariable;
         }
 
         /// <summary>
@@ -156,8 +157,9 @@ namespace CDSPractical {
             /// <param name="source"></param>
             /// <returns></returns>
             public IEnumerable<object> Shuffle(IEnumerable<object> source) {
-           
-             return source.Reverse();
+            Random rnd = new Random();
+            var result = source.OrderBy(x => rnd.Next()).Select(x=>x).ToList(); 
+             return result;
         }
 
         /// <summary>
