@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 namespace CDSPractical {
@@ -22,7 +23,12 @@ namespace CDSPractical {
         /// <param name="source">An enumerable containing words</param>
         /// <returns></returns>
         public IEnumerable<int> ExtractNumbers(IEnumerable<string> source) {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+           
+
+            int value= 0;
+            return source.Where(s => int.TryParse(s, out value)).Select(s => value);
+
         }
 
         /// <summary>
@@ -67,7 +73,9 @@ namespace CDSPractical {
         /// <param name="second">Second list of words</param>
         /// <returns></returns>
         public string LongestCommonWord(IEnumerable<string> first, IEnumerable<string> second) {
-            throw new NotImplementedException();
+
+            IEnumerable<string> commonStr = first.Intersect(second);
+            return commonStr.OrderByDescending(s => s.Length).FirstOrDefault();
         }
 
         /// <summary>
@@ -76,14 +84,15 @@ namespace CDSPractical {
         /// 
         /// For example:
         /// 
-        /// DistanceInMiles(16.00);
+        ///         (16.00);
         /// 
         /// ; would return 10.00;
         /// </summary>
         /// <param name="km">distance in kilometers</param>
         /// <returns></returns>
         public double DistanceInMiles(double km) {
-            throw new NotImplementedException();
+
+            return km / 1.6;
         }
 
         /// <summary>
@@ -99,7 +108,9 @@ namespace CDSPractical {
         /// <param name="miles">distance in miles</param>
         /// <returns></returns>
         public double DistanceInKm(double miles) {
-            throw new NotImplementedException();
+          
+
+            return miles * 1.6;
         }
 
         /// <summary>
@@ -121,28 +132,32 @@ namespace CDSPractical {
         /// <param name="word">The word to check</param>
         /// <returns></returns>
         public bool IsPalindrome(string word) {
-            throw new NotImplementedException();
+        
+           var rev = new string(word.Reverse().ToArray());
+           
+            return word.Equals(rev, StringComparison.OrdinalIgnoreCase);
         }
 
-        /// <summary>
-        /// Write a method that takes an enumerable list of objects and shuffles
-        /// them into a different order.
-        /// 
-        /// For example:
-        /// 
-        /// Shuffle(new List<string>{ "one", "two" });
-        /// 
-        /// ; would return:
-        /// 
-        /// {
-        ///   "two",
-        ///   "one"
-        /// }
-        /// </summary>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        public IEnumerable<object> Shuffle(IEnumerable<object> source) {
-            throw new NotImplementedException();
+            /// <summary>
+            /// Write a method that takes an enumerable list of objects and shuffles
+            /// them into a different order.
+            /// 
+            /// For example:
+            /// 
+            /// Shuffle(new List<string>{ "one", "two" });
+            /// 
+            /// ; would return:
+            /// 
+            /// {
+            ///   "two",
+            ///   "one"
+            /// }
+            /// </summary>
+            /// <param name="source"></param>
+            /// <returns></returns>
+            public IEnumerable<object> Shuffle(IEnumerable<object> source) {
+           
+             return source.Reverse();
         }
 
         /// <summary>
@@ -154,7 +169,22 @@ namespace CDSPractical {
         /// <param name="source"></param>
         /// <returns></returns>
         public int[] Sort(int[] source) {
-            throw new NotImplementedException();
+            int tempData;
+
+            for (int i = 0; i < source.Length - 1; i++)
+            {
+                for (int j = i + 1; j < source.Length; j++)
+                {
+                    if (source[i] > source[j])
+                    {
+                        tempData = source[i];
+                        source[i] = source[j];
+                        source[j] = tempData;
+                    }
+                }
+            }
+
+            return source;
         }    
 
         /// <summary>
@@ -167,8 +197,24 @@ namespace CDSPractical {
         /// not exceed four million, find the sum of the even-valued terms.
         /// </summary>
         /// <returns></returns>
-        public int FibonacciSum() {
-            throw new NotImplementedException();
+        public int FibonacciSum()
+        {
+           
+            int start = 0;
+            int second = 1;
+            int evenSum = 0;
+            var sum = 0;
+            while (second < 4000000) // term should be less than 4 million
+            {
+                sum = start + second;
+                if (sum % 2 == 0)
+                {
+                    evenSum += sum;
+                }
+                start = second;
+                second = sum;
+            }
+            return evenSum;
         }
 
         /// <summary>
@@ -198,6 +244,7 @@ namespace CDSPractical {
                     }                    
                 });
                 threads[i].Start();
+                threads[i].Join();
             }
 
             for (var i = 0; i < numThreads; i++) {

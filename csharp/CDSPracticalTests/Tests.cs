@@ -8,7 +8,7 @@ namespace CDSPracticalTests {
         Questions instance = new Questions();
 
         [Fact]
-        public void CanExtractNumbers() {
+        public void  CanExtractNumbers() {
             Assert.Equal(new List<int> {
                 123,
                 234
@@ -104,7 +104,13 @@ namespace CDSPracticalTests {
 
         [Fact]
         public void CanSort() {
-            throw new NotImplementedException();
+            Assert.Equal(new int[] {
+                11,
+                12,
+                13,14,15,16,17,18,19,20
+            }, instance.Sort(new int[] {
+                14,11,17,15,19,20,12,13,16,18
+            }));
         }
 
         [Fact]
