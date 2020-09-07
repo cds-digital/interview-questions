@@ -158,8 +158,9 @@ namespace CDSPractical {
             /// <returns></returns>
             public IEnumerable<object> Shuffle(IEnumerable<object> source) {
             Random rnd = new Random();
-            var result = source.OrderBy(x => rnd.Next()).Select(x=>x).ToList(); 
-             return result;
+            var result = source.Select(x => new { arrvalue = x, order = rnd.Next() })
+                .OrderBy(x => x.order).Select(x => x.arrvalue).ToList();
+            return result;
         }
 
         /// <summary>
