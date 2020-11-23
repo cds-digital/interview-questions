@@ -141,7 +141,7 @@ namespace CDSPractical
         /// <returns></returns>
         public bool IsPalindrome(string word)
         {
-            return !string.IsNullOrWhiteSpace(word) ? word.ToLower().Equals(word.ToLower().Reverse()) : false;
+            return !string.IsNullOrWhiteSpace(word) && word.ToLower().Equals(word.ToLower().Reverse());
         }
 
         /// <summary>
